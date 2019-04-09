@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <title>Part 2 Size | CSS Paint API</title>
+  <meta name="description" content="Demonstration for Mozilla Developer Network using CSS Paint API.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<header>
+	<h2>CSS Houdini Collection</h2>
+	<h1>CSS Paint API Demo: Part 2 Size</h1>
+</header>
+
+<article class="houdini-demo paint-api">
+
+	<p>Now it would be better if we had an idea of the size of our element, so we could create the background relative to the element, this way we could use the same background on other elements as well, and the background would always fit.</p>
+
+	<p>The second parameter we can pass into the <code>paint()</code> function gives us access to the width and the height of the element, via <code>.width</code> and <code>.height</code> properties. Pretty handy.</p>
+
+	<p>Let's take a look at our <code>header-highlight.js</code> script now we can use this functionality.</p>
+
+	<pre class="language-js"><code>
+registerPaint('headerHighlight', class {
+  // Whether Alpha is allowed - This is set to true by default, if it is set to false all colours used on the canvas will have full opacity, or alpha of 1.0
+  static get contextOptions() { return {alpha: true}; }
+
+  paint(ctx, size) {
+    // ctx - drawing context
+    // size - size of the box being painted
+
+	ctx.fillStyle = 'hsla(55, 90%, 60%, 1.0)';
+	ctx.fillRect(0, size.height/4, size.width*0.66, size.height*0.7);
+
+  }
+});</code></pre>
+
+	<p>Our header now has a highlight which changes according to it's size.</p>
+
+	<h1 class="example">My Cool Header</h1>
+
+	<p>And there's more, we can start to access custom properties inside our worklet function as well. <a href="../03partThree/">Go to Part Three </a></p>
+</article>
+
+<footer>
+	<p>Example created for MDN Docs: <a href="https://developer.mozilla.org/en-US/">See fill documentation here</a> </p>
+</footer>
+
+<script src="/sharedAssets/prism.js"></script>
+<script>
+  CSS.paintWorklet.addModule('header-highlight.js');
+</script>
+
+</body>
+</html>

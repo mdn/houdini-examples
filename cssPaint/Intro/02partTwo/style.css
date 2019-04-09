@@ -1,0 +1,5 @@
+@import '/sharedAssets/shared-styles.css';
+
+.example {
+	background-image: paint(headerHighlight);
+}
