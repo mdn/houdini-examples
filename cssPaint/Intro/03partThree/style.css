@@ -1,0 +1,8 @@
+@import '/sharedAssets/shared-styles.css';
+
+.example {
+	--highColour: hsla(55, 90%, 60%, 1.0);
+	background-image: paint(headerHighlight);
+}
+
+.example:nth-of-type(2) {--highColour: hsla(125, 90%, 60%, 1.0);}

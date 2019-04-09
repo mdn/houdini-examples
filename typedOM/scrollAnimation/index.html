@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <title>Changing header | Typed OM Houdini Demos</title>
+  <meta name="description" content="Demonstration for Mozilla Developer Network using Houdini Typed OM API. A header that changes on scroll.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="scroll.css">
+
+  <style type="text/css">
+
+  </style>
+
+</head>
+<body>
+
+	<header class="header-site">
+
+		<div class="header-site__logo">
+			<figure>
+				<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;" xml:space="preserve"><g preserveAspectRatio="xMidYMid"><path d="M12,24h-1v-0.5c0-3.032,2.468-5.5,5.5-5.5H17v1h-0.5c-2.481,0-4.5,2.019-4.5,4.5V24z"/><path d="M6.5,19H6v-1h0.5c2.481,0,4.5-2.019,4.5-4.5V13h1v0.5C12,16.532,9.533,19,6.5,19z"/><path d="M12,24h-1v-0.5c0-2.481-2.019-4.5-4.5-4.5H6v-1h0.5c3.033,0,5.5,2.468,5.5,5.5V24z"/><path d="M17,19h-0.5c-3.032,0-5.5-2.468-5.5-5.5V13h1v0.5c0,2.481,2.019,4.5,4.5,4.5H17V19z"/><path d="M20,9h-1V8.5C19,6.019,21.019,4,23.5,4H24v1h-0.5C21.57,5,20,6.57,20,8.5V9z"/><path d="M15.5,5H15V4h0.5C17.43,4,19,2.43,19,0.5V0h1v0.5C20,2.981,17.981,5,15.5,5z"/><path d="M20,9h-1V8.5C19,6.57,17.43,5,15.5,5H15V4h0.5C17.981,4,20,6.019,20,8.5V9z"/><path d="M24,5h-0.5C21.019,5,19,2.981,19,0.5V0h1v0.5C20,2.43,21.57,4,23.5,4H24V5z"/><circle cx="2" cy="16" r="1"/><circle cx="13.5" cy="9.5" r="0.5"/><circle cx="4.5" cy="22.5" r="0.5"/><circle cx="17.5" cy="22.5" r="0.5"/><circle cx="20" cy="15" r="1"/><rect x="5" y="3" width="1" height="5"/><rect x="3" y="5" width="5" height="1"/><rect x="5" width="1" height="1"/><rect x="10" y="5" width="1" height="1"/><rect x="5" y="10" width="1" height="1"/><rect x="0" y="5" width="1" height="1"/></g></svg>
+				<figcaption>Created by ✦ Shmidt Sergey ✦ from the Noun Project</figcaption>
+			</figure>
+			<h1>MDN Houdini Examples</h1>
+		</div>
+
+		<nav class="header-site__nav">
+			<ul>
+				<li><a href="#">Intro</a></li>
+				<li><a href="#">Typed OM</a></li>
+				<li><a href="#">CSS Paint</a></li>
+			</ul>
+		</nav>
+	</header>
+
+	<section></section>
+	<section></section>
+
+<script type="text/javascript">
+
+	const headerEl = document.querySelector('.header-site');
+	const headerHeight = Math.round(headerEl.getBoundingClientRect().height);
+	const navEl = document.querySelector('.header-site__nav');
+	const logo = document.querySelector('.header-site__logo figure');
+	const headerText = document.querySelector('.header-site__logo h1');
+
+let shrink = false;
+
+function reduceHeader(scrollPosY) {
+
+	// make scroll pos a ratio between 0-1
+	let ratio = scrollPosY > headerHeight ? 1 : scrollPosY/headerHeight;
+	// console.log(ratio);
+
+	// shrink logo
+	let logoWidth = ratio > 0.3 ? 10 : 30 - (30*(ratio*2));
+
+	logo.attributeStyleMap.set('width', CSS.percent(logoWidth));
+
+	// increase width of logo and nav
+
+
+	if (shrink && scrollPosY > 50) {
+		// animate
+		shrink = false;
+	} else if ((shrink === false) && (scrollPosY < 50)) {
+		// animate big
+		shrink = true;
+	}
+
+
+	// let shrink = scrollPosY > 50 ? true : false;
+
+	// use that ratio to determine cell size, font size and element size
+
+	// Recalculate grid columns
+	// let columnTwoSize = ratio * 50;
+	// let columnOneSize = 100 - columnTwoSize;
+
+	// headerEl.attributeStyleMap.set('grid-template-columns', `${CSS.percent(columnOneSize)} ${CSS.percent(columnTwoSize)}` );
+
+
+
+	// move nav to right when scroll far enough
+	if (!shrink) {
+
+		// make sure attribute is not on nav
+		if (!navEl.attributeStyleMap.has('grid-area')) {
+			// this doesn't work but it should
+			// navEl.attributeStyleMap.set('grid-area', "1 \/ 2 \/ 2 \/ 3");
+			navEl.style['grid-area'] = "1 / 2 / 2 / 3";
+		}
+
+	} else {
+		// check if attribute is on nav
+		if (navEl.attributeStyleMap.has('grid-area')) {
+			navEl.attributeStyleMap.delete('grid-area');
+		}
+	}
+
+
+
+	if (!shrink) {
+
+		// make sure attribute is not on nav
+		if (!logo.attributeStyleMap.has('display')) {
+			logo.attributeStyleMap.set('display', "inline-block");
+			logo.querySelector('figcaption').attributeStyleMap.set('display', "none");
+			headerText.attributeStyleMap.set('display', "inline-block");
+		}
+
+	} else {
+		// check if attribute is on nav
+		if (logo.attributeStyleMap.has('display')) {
+			logo.attributeStyleMap.delete('display');
+			logo.querySelector('figcaption').attributeStyleMap.delete('display');
+			headerText.attributeStyleMap.delete('display');
+		}
+	}
+
+}
+
+function animate() {
+
+	// shrink logo
+
+}
+
+
+let last_known_scroll_position = 0;
+let ticking = 0;
+
+window.addEventListener('scroll', function(e) {
+
+  last_known_scroll_position = window.scrollY;
+
+  if (ticking === 1) {
+    window.requestAnimationFrame(function() {
+      reduceHeader(last_known_scroll_position);
+      ticking = 0;
+    });
+  } else {
+    ticking++;
+  }
+});
+
+</script>
+
+</body>
+</html>

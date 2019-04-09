@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <title>Part 3 Custom Properties | CSS Paint API</title>
+  <meta name="description" content="Demonstration for Mozilla Developer Network using CSS Paint API.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+	<header>
+		<h2>CSS Houdini Collection</h2>
+		<h1>CSS Paint API Demo: Part 3 Custom Properties</h1>
+	</header>
+
+<article class="houdini-demo paint-api">
+
+	<p>So now we have our cool header with a custom paint background, let's expand on it.</p>
+
+	<p>We'll update the <code>paint()</code> function to draw a more funky background and wouldn't it be great if we could choose the colour of the background whenever we wanted to use it? Another feature of the Paint API is the ability to access custom properties available to the element.</p>
+
+	<p>Let's take a look:</p>
+
+	<h1 class="example">My Cool Header</h1>
+	<h1 class="example">My Cool Header</h1>
+
+	<p>We add a custom property in our CSS:</p>
+
+	<pre><code class="language-css">.example {
+	--highColour: hsla(55, 90%, 60%, 1.0);
+	background-image: paint(headerHighlight);
+}
+</code></pre>
+
+	<p>Now we can use the <code>inputProperties()</code> method in the <code>registerPaint()</code> class, grab that property and use it within our <code>paint()</code> function:</p>
+
+	<pre><code class="language-js">static get inputProperties() { return ['--highColour']; }
+</code></pre>
+
+	<p>Note: The <code>inputProperties()</code> method returns all properties affecting the element, not just custom properties</p>
+
+	<pre><code class="language-js">paint(ctx, size, props) {
+	// Paint uses Typed OM to retrieve the custom property value, so, as with the Typed OM API, we have to use the <code>get()</code> method to access the value
+	ctx.fillStyle = props.get('--highColour');
+	...
+}
+</code></pre>
+
+	<p>Back in our CSS, on elements that have this <code>paint()</code> function generating their backgound, we can reset the <code>--highColour</code> custom property to change it's colour:</p>
+
+	<pre class="language-css"><code>.example {
+	--highColour: hsla(55, 90%, 60%, 1.0);
+	background-image: paint(headerHighlight);
+}
+.example:nth-of-type(2) {
+	--highColour: hsla(155, 90%, 60%, 1.0);
+}
+</code></pre>
+
+	<p>You can check out the entire <code>registerPaint()</code> function in <a href="header-highlight.js">header-highlight.js here</a>. Not only can we pass in custom properties, but also custom arguments when we call the <code>paint()</code> function in our css. <a href="../04partFour/">Let's take a look in part 4.</a></p>
+
+</article>
+
+<footer>
+	<p>Example created for MDN Docs: <a href="https://developer.mozilla.org/en-US/">See fill documentation here</a> </p>
+</footer>
+
+<script src="/sharedAssets/prism.js"></script>
+<script>
+  CSS.paintWorklet.addModule('header-highlight.js');
+</script>
+
+</body>
+</html>
