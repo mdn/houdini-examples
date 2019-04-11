@@ -6,6 +6,7 @@
   <meta name="description" content="Demonstration for Mozilla Developer Network using CSS Paint API.">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <link rel="stylesheet" href="../../../sharedAssets/shared-styles.css">
   <link rel="stylesheet" href="style.css">
 
 </head>
@@ -40,7 +41,7 @@
 	<pre><code class="language-js">static get inputProperties() { return ['--highColour']; }
 </code></pre>
 
-	<p>Note: The <code>inputProperties()</code> method returns all properties affecting the element, not just custom properties</p>
+	<p>Note: The <code>inputProperties()</code> method returns all properties affecting the element, not just custom properties.</p>
 
 	<pre><code class="language-js">paint(ctx, size, props) {
 	// Paint uses Typed OM to retrieve the custom property value, so, as with the Typed OM API, we have to use the <code>get()</code> method to access the value
@@ -49,7 +50,7 @@
 }
 </code></pre>
 
-	<p>Back in our CSS, on elements that have this <code>paint()</code> function generating their backgound, we can reset the <code>--highColour</code> custom property to change it's colour:</p>
+	<p>Back in our CSS, on elements that have this <code>paint()</code> function generating their backgound, we can reset the <code>--highColour</code> custom property to change its color:</p>
 
 	<pre class="language-css"><code>.example {
 	--highColour: hsla(55, 90%, 60%, 1.0);
@@ -68,6 +69,7 @@
 	<p>Example created for MDN Docs: <a href="https://developer.mozilla.org/en-US/">See fill documentation here</a> </p>
 </footer>
 
+<script src="../../../sharedAssets/prism.js"></script>
 <script src="/sharedAssets/prism.js"></script>
 <script>
   CSS.paintWorklet.addModule('header-highlight.js');

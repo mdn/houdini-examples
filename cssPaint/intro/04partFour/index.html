@@ -6,6 +6,7 @@
   <meta name="description" content="Demonstration for Mozilla Developer Network using CSS Paint API.">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <link rel="stylesheet" href="../../../sharedAssets/shared-styles.css">
   <link rel="stylesheet" href="style.css">
 
 </head>
@@ -48,7 +49,7 @@
 }
 </code></pre>
 
-	<p>In this case we have just added the string 'stroke', but there's more, if the custom argument is a css value, for instance a unit, we can invoke Typed OM CSSStyleValue class (and sub classes) by using the value type keyword when we retrieve it in the <code>registerPaint()</code> function.</p>
+	<p>In this case we have just added the string 'stroke', but there's more — if the custom argument is a CSS value, for instance a unit, we can invoke Typed OM CSSStyleValue class (and sub classes) by using the value type keyword when we retrieve it in the <code>registerPaint()</code> function.</p>
 
 	<p>Let's say we add a second argument with how many pixels wide we want the stroke to be:</p>
 
@@ -78,7 +79,7 @@
 }
 </code></pre>
 
-	<p>NB: It's worth noting the difference between using custom properties to control different parts of this worklet and the arguments set out here. The situation will depend on this: Custom properties (and in fact any properties on the style map) are global, they can be used elsewhere within our CSS (and JS), so you may have a <code>--mainColour</code> which will be useful for setting the colour within a <code>paint()</code> function, but also sets colours elsewhere in your CSS. If you wanted to change it specifically for paint, it could prove difficult, so this is where thinking about custom arguments may come in. Another way to think about it is arguments are set to control what you are actually drawing, properties are set to control styling.</p>
+	<p>Note: It's worth noting the difference between using custom properties to control different parts of this worklet and the arguments set out here. The situation will depend on this: Custom properties (and in fact any properties on the style map) are global — they can be used elsewhere within our CSS (and JS). You may for example have a <code>--mainColor</code>, which will be useful for setting the color within a <code>paint()</code> function, but also sets colors elsewhere in your CSS. If you wanted to change it specifically for paint, it could prove difficult, so this is where thinking about custom arguments may come in. Another way to think about it is that arguments are set to control what you are actually drawing, whereas properties are set to control styling.</p>
 
 	<p>Now we can really start to see the benefits of this API, if we can control a myriad of drawing parameters from our CSS through both custom properties and extra <code>paint()</code> function arguments, then we can really start to build reusable and infinitely controlled styling elements.</p>
 
@@ -90,6 +91,7 @@
 	<p>Example created for MDN Docs: <a href="https://developer.mozilla.org/en-US/">See fill documentation here</a> </p>
 </footer>
 
+<script src="../../../sharedAssets/prism.js"></script>
 <script src="/sharedAssets/prism.js"></script>
 <script>
   CSS.paintWorklet.addModule('header-highlight.js');

@@ -6,6 +6,7 @@
   <meta name="description" content="Demonstration for Mozilla Developer Network using CSS Paint API.">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <link rel="stylesheet" href="../../../sharedAssets/shared-styles.css">
   <link rel="stylesheet" href="style.css">
 
   <style type="text/css">
@@ -22,18 +23,18 @@
 
 <article class="houdini-demo paint-api">
 
-	<p>The CSS Paint API is to be used where ever you would invoke an image in CSS - backgrounds, borders, masks etc...</p>
+	<p>The CSS Paint API is designed to be used wherever you would invoke an image in CSS — backgrounds, borders, masks etc.</p>
 
-	<p>Here's a really simple example - let's say you want to create a cool half highlight background, like on this header:</p>
+	<p>Here's a really simple example - let's say you want to create a cool half-highlight background, like on this header:</p>
 
 	<h1 class="example">My Cool Header</h1>
 
-	<p>The main setup & design will happen in an external script - a worklet - (we'll get to that in a minute), we need to register that <i>worklet</i> from our main script:</p>
+	<p>The main setup & design will happen in an external script, a worklet, which we'll discuss in a minute. We first need to register that worklet from our main script:</p>
 
 	<pre class="language-js"><code>// in our main script
 await CSS.paintWorklet.addModule('header-highlight.js');</code></pre>
 
-	<p>Now we can create that <code>header-highlight.js</code> worklet, and inside it we use the <code>registerPaint()</code> function to name our CSS Paint worklet, and also pass in a class which does all the magic. Let's take a look:</p>
+	<p>Now we'll create that <code>header-highlight.js</code> worklet; inside it we use the <code>registerPaint()</code> function to name our CSS Paint worklet, and also pass in a class that does all the magic:</p>
 
 	<pre class="language-js"><code>registerPaint('headerHighlight', class {
 
@@ -49,15 +50,15 @@ await CSS.paintWorklet.addModule('header-highlight.js');</code></pre>
 	}
 });</code></pre>
 
-	<p>Now we have created a new paint worklet, and given it a name <code>headerHighlight</code>. We can now use that in our css, along with the <code>paint()</code> function, where we would normally call an image.</p>
+	<p>Now we have created a new paint worklet, and given it a name <code>headerHighlight</code>. We can now use that in our CSS, along with the <code>paint()</code> function, where we would normally call an image.</p>
 
 	<pre class="language-css"><code>.example {
 	background-image: paint(headerHighlight);
 }</code></pre>
 
-	<p>Our paint function takes one argument (we'll look at more in due course): <code>ctx</code>. This is the 2D Rendering Context, which is a subset of the HTML5 Canvas API. It contains pretty much all the features apart from "...CanvasImageData, CanvasUserInterface, CanvasText, or CanvasTextDrawingStyles APIs..." (taken from spec <a href="https://drafts.css-houdini.org/css-paint-api-1/#2d-rendering-context">https://drafts.css-houdini.org/css-paint-api-1/#2d-rendering-context).</a> So in short we can use it to <i>draw</i> whatever we like as our <b>image</b>.</p>
+	<p>Our paint function takes one argument (we'll look at more in due course): <code>ctx</code>. This is the 2D Rendering Context, which is a subset of the HTML5 Canvas API. It contains pretty much all the features apart from "...CanvasImageData, CanvasUserInterface, CanvasText, or CanvasTextDrawingStyles APIs..." (taken from spec <a href="https://drafts.css-houdini.org/css-paint-api-1/#2d-rendering-context">https://drafts.css-houdini.org/css-paint-api-1/#2d-rendering-context).</a> So in short we can use it to draw whatever we like as our background image.</p>
 
-	<p>The above example just simple draws a filled rectangle, you can do a lot more than that <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API">(check out the Canvas API docs)</a>.</p>
+	<p>The above example just simple draws a filled rectangle, you can do a lot more than that (<a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API">check out the Canvas API docs</a>).</p>
 
 	<p>Let's take a look at some of the other data available to the <code>paint()</code> function. <a href="../02partTwo/">Go to Part Two</a></p>
 </article>
@@ -66,7 +67,7 @@ await CSS.paintWorklet.addModule('header-highlight.js');</code></pre>
 	<p>Example created for MDN Docs: <a href="https://developer.mozilla.org/en-US/">See fill documentation here</a> </p>
 </footer>
 
-<script src="/sharedAssets/prism.js"></script>
+<script src="../../../sharedAssets/prism.js"></script>
 <script>
   CSS.paintWorklet.addModule('header-highlight.js');
 </script>

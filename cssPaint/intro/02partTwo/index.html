@@ -6,6 +6,7 @@
   <meta name="description" content="Demonstration for Mozilla Developer Network using CSS Paint API.">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <link rel="stylesheet" href="../../../sharedAssets/shared-styles.css">
   <link rel="stylesheet" href="style.css">
 
 </head>
@@ -18,7 +19,7 @@
 
 <article class="houdini-demo paint-api">
 
-	<p>Now it would be better if we had an idea of the size of our element, so we could create the background relative to the element, this way we could use the same background on other elements as well, and the background would always fit.</p>
+	<p>It would be better if we had an idea of the size of our element, so we could create the background relative to the element; this way we could use the same background on other elements as well, and the background would always fit.</p>
 
 	<p>The second parameter we can pass into the <code>paint()</code> function gives us access to the width and the height of the element, via <code>.width</code> and <code>.height</code> properties. Pretty handy.</p>
 
@@ -50,6 +51,7 @@ registerPaint('headerHighlight', class {
 	<p>Example created for MDN Docs: <a href="https://developer.mozilla.org/en-US/">See fill documentation here</a> </p>
 </footer>
 
+<script src="../../../sharedAssets/prism.js"></script>
 <script src="/sharedAssets/prism.js"></script>
 <script>
   CSS.paintWorklet.addModule('header-highlight.js');
