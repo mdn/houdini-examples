@@ -1,24 +1,43 @@
 # Typed OM Reference
 
-## Get Styles
+---
 
-#### Get all styles
+## Style Maps
+
+#### All computed styles
 
 `element.getComputedStyles();`
 
-#### Get attribute styles
+#### Attribute styles
 
-`element.`
+`element.attributeStyleMap`
 
-#### Get stylesheet styles
+#### Stylesheets
 
-`element.`
+`document.styleSheets`
 
-#### Set rule
+#### Methods
 
-#### Parse
+get set delete has clear
 
-#### Remove
+---
+
+## Value Types
+
+#### Style
+#### Keyword
+#### Image
+#### Numeric
+#### Unit
+#### Math
+#### Transform
+#### Unparsed
+#### Variable
+
+#### Methods
+
+parse
+
 
 
 #### Convert units
@@ -36,4 +55,7 @@ Describe each one
 
 You can't `get()` a property value from styleAttr for instance without it being present on the element first (by using `set()` for example).
 
-The spec is being worked on, holes are being plugged and new features in discussion. There's an issue being worked on to solve the problem we encountered when trying to add
+The spec is being worked on, holes are being plugged and new features in discussion.
+
+# Resources
+
