@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <title>Part 3 Methods | Typed OM</title>
+  <meta name="description" content="Demonstration for Mozilla Developer Network using Typed OM.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="style.css">
+
+  <style type="text/css">
+
+  </style>
+
+</head>
+<body>
+
+<header>
+	<h2>CSS Houdini Collection</h2>
+	<h1>Typed OM: Part 3 Methods</h1>
+</header>
+
+<article class="houdini-demo typed-om">
+
+	<button class="example">Click Me</button>
+
+	<p>Now that we know all about the <code>CSSStyleValue</code> types, let's take a look at creating them and setting them on an element.</p>
+
+	<p>So far we've been working with <code>computedStyleMap</code> which returns all the properties and values affecting an element, but there is also the <code>attributeStyleMap</code> for getting and setting inline styles. This is much like our already commonly used <code>.style</code> method, and you might wonder why change something that works. With this new Typed OM method we also work with all the <code>CSSStyleValue</code> types, rather than just strings. This makes our code far more robust and flexible.</p>
+
+	<p>NB: Both the computed and attribute style maps are of type <code>StylePropertyMap</code> which is a map-like object, and so supports all the common methods like get/set/keys/values/entries making them intuitive to work with<sup>1</sup>. There is also <code>styleMap</code>	which is described further down.</p>
+
+	<p>Let's take a look at the methods available to us when using the <code>attributeStyleMap</code>. To simply add a style, and then retrieve it we can use the <code>set()</code> and <code>get()</code> methods.</p>
+
+	<pre class="language-js"><code>buttonEl.attributeStyleMap.set('padding-top', CSS.px(10));
+
+const padTop = buttonEl.attributeStyleMap.get('padding-top');
+
+console.log(padTop);
+// logs: CSSUnitValue {value: 10, unit: 'px'}</code></pre>
+
+	<p>A couple of things to note here: When we are setting the pixel value we are creating a <code>CSSUnitValue</code> using the <code>CSS.px()</code> factory method. We could have set it thus:</p>
+
+	<pre class="language-js"><code>new CSSUnitValue(10, px);</code></pre>
+
+	<p>We can use this to create any <code>CSSStyleValue</code> we've already seen</p>
+
+	<p>Also, when we get the property a <code>CSSUnitValue</code> returned. That's handy because we don't have to do any parsing to retrieve the number <em>or</em> the unit, they are just available to us.</p>
+
+	<p>And there's more, as well as the <code>set()</code> and <code>get()</code> methods, there are <code>has()</code>, <code>delete()</code>, and <code>clear()</code>.</p>
+
+	<pre class="language-js"><code>buttonEl.attributeStyleMap.has('padding-top') // returns true
+
+buttonEl.attributeStyleMap.delete('padding-top') // removes padding-top from attribute styles
+
+buttonEl.attributeStyleMap.clear() // removes all attribute styles
+	</code></pre>
+
+	<p>As well as attribute styles we can also access stylesheet rules:</p>
+
+	<pre class="language-js"><code>const stylesheet = document.styleSheets[0];
+
+Object.values(stylesheet.cssRules).forEach(block => {
+
+	if (block.selectorText === 'button') {
+		console.log(block.cssText);
+	}
+})
+// Logs css block: button { --unit: 1.2rem; --mainColour: hsl(198, 100%, 66%); display: inline-block; padding: var(--unit) calc(var(--unit)*2); ...}
+</code></pre>
+
+	<p>Our methods already discussed are available to us and we can modify or update any of these properties like so:</p>
+
+<pre class="language-js"><code>if (block.selectorText === '.example') {
+	block.styleMap.set('--mainColour', 'black');
+}
+</code></pre>
+
+	<p>Might be worth noting this should be used with caution, as it's a pretty powerful way to update your styles.</p>
+
+	<p>Well done! You've covered all the basics for using Typed OM. There's quite a bit there and with all the values quite a bit still to think about (all the math sums for instance) There's <a href="../../reference/">a reference with resources here</a> and loads more information in the MDN docs.</p>
+
+	<p>There's <a href="">more examples here</a> of using Typed OM in practice.</p>
+
+	<p><sup>1</sup>https://developers.google.com/web/updates/2018/03/cssom</p>
+</article>
+
+<footer>
+	<p>Example created for MDN Docs: <a href="https://developer.mozilla.org/en-US/">See fill documentation here</a> </p>
+</footer>
+
+<script src="/sharedAssets/prism.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
