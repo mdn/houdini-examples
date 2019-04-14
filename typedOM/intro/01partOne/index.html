@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <title>Part 1 Intro | Typed OM</title>
+  <meta name="description" content="Demonstration for Mozilla Developer Network using Typed OM.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="style.css">
+
+  <style type="text/css">
+
+  </style>
+
+</head>
+<body>
+
+<header>
+	<h2>CSS Houdini Collection</h2>
+	<h1>Typed OM: Part 1 Intro</h1>
+</header>
+
+<article class="houdini-demo typed-om">
+
+	<button class="example">Click Me</button>
+
+	<p>Let's use this cool button to go over some of the basic features of Typed OM.</p>
+	<p>For any element you can use the <code>computedStyleMap()</code> method, to retrieve all the styles affecting the element.</p>
+	<p>Let's use this method to get all the styles for the below button.</p>
+
+	<pre class="language-js"><code>// get the button element
+const buttonEl = document.querySelector('button');
+// get our element to append info to
+const stylesList = document.querySelector('#all-styles');
+
+// let's get some styles -> we can retrieve all computed styles with `computedStyleMap`
+const allComputedStyles = buttonEl.computedStyleMap();
+
+// which returns a map of all computed styles -> ie those already set in non-inline css
+for (const [prop, val] of allComputedStyles) {
+	// properties
+	const term = document.createElement('dt');
+	term.appendChild(document.createTextNode(prop));
+	stylesList.appendChild(term);
+
+	// values
+	const valDef = document.createElement('dd');
+	valDef.appendChild(document.createTextNode(val));
+	stylesList.appendChild(valDef);
+}</code></pre>
+
+	<p>Check out all the retrieved styles</p>
+	<details>
+		<summary>Expand all the styles</summary>
+		<dl id="all-styles"></dl>
+	</details>
+
+	<p>Let's take a <a href="../02partTwo">look at different value types in part two.</a></p>
+
+</article>
+
+<footer>
+	<p>Example created for MDN Docs: <a href="https://developer.mozilla.org/en-US/">See fill documentation here</a> </p>
+</footer>
+
+<script src="/sharedAssets/prism.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
