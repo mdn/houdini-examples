@@ -1,0 +1,26 @@
+@import '/sharedAssets/shared-styles.css';
+
+.example {
+	--unit: 1.2rem;
+	--mainColour: hsl(198, 100%, 66%);
+	display: inline-block;
+	padding: var(--unit) calc(var(--unit)*2);
+	width: calc(30% + 20px);
+	background: var(--mainColour) linear-gradient(180deg, var(--mainColour), hsl(198, 100%, 56%)) no-repeat left top;
+	background-position: 0% 0%;
+	border: 4px solid var(--mainColour);
+	border-radius: 2px;
+
+	font-size: calc(var(--unit)*2); color: var(--white);
+	font-family: "zillaslab", serif;
+
+	cursor: pointer;
+	transform: scale(0.95);
+}
+
+.example:hover {
+	background: var(--white) none no-repeat top left;
+	color: var(--black);
+	border-color: var(--black);
+	transform: scale(1);
+}
