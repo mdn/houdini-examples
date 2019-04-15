@@ -90,8 +90,7 @@ parsePropsEl.appendChild(
 // parsing
 const parsed = CSSNumericValue.parse(cssUnparseVal);
 
-const anotherParsed = CSSStyleValue.parseAll('background', 'red url() no-repeat top left');
-console.log(anotherParsed);
+const anotherParsed = CSSStyleValue.parse('background', 'red');
 
 // create a custom prop
 const customProp = new CSSVariableReferenceValue('--secondColour', new CSSUnparsedValue(['black']));
