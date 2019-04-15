@@ -6,6 +6,7 @@
   <meta name="description" content="Demonstration for Mozilla Developer Network using Typed OM.">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <link rel="stylesheet" href="../../../sharedAssets/shared-styles.css">
   <link rel="stylesheet" href="style.css">
 
   <style type="text/css">
@@ -24,19 +25,19 @@
 
 	<button class="example">Click Me</button>
 
-	<p>A huge array of properties and values is returned. Let's take a closer look at those values. They are all of type <code>CSSStyleValue</code>. Let's retrieve some values using the <code>get()</code> method which comes with <code>computedStyleMap()</code>.</p>
+	<p>A huge array of properties and values is returned. Let's take a closer look at those values. They are all of type <code>CSSStyleValue</code> — let's retrieve some values using the <code>get()</code> method, which comes with <code>computedStyleMap()</code>.</p>
 
 	<p><code>CSSStyleValue</code> has sub classes, depending on the type of value you use for the defined property. Let's take a look at them.</p>
 
 	<section class="type style-val">
 		<h3><code>CSSStyleValue</code></h3>
-		<p>Parent class of which all values set on an element are.</p>
-		<p>This class holds <code>parse</code> and <code>parseAll</code> methods, which we will look at a bit later. Before we do that, let's take a look at all the sub classes.</p>
+		<p>Parent class for all values set on an element.</p>
+		<p>This class holds the <code>parse</code> and <code>parseAll</code> methods, which we will look at a bit later. Before we do that, let's take a look at all the sub classes.</p>
 	</section>
 
 	<section class="type keyword-val">
 		<h3><code>CSSKeywordValue</code></h3>
-		<p>For instance <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Value_definition_syntax#Keywords">list here</a> So thing's like the obvious <code>inherit</code>, <code>initial</code>, <code>unset</code>. Then anything you don't quote: <code>auto</code>, <code>grid</code> etc...</p>
+		<p>Class that defines things like keywords (<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Value_definition_syntax#Keywords">see the list here</a>) — e.g. <code>inherit</code>, <code>initial</code>, <code>unset</code>, and anything you don't quote such as <code>auto</code>, <code>grid</code> etc...</p>
 
 		<pre class="get-type language-js"><code>const cssKeywordValue = allComputedStyles.get('display');
 <span class="comment">// Returns: </span></code></pre>
@@ -50,7 +51,7 @@
 
 	<section class="type image-val">
 		<h3><code>CSSImageValue</code></h3>
-		<p>Is returned when the value of a CSS property is an image.</p>
+		<p>Returned when the value of a CSS property is an image.</p>
 
 		<pre class="get-type language-js"><code>const cssImageValue = allComputedStyles.get('background-image');
 <span class="comment">// Returns: </span></code></pre>
@@ -63,7 +64,7 @@
 
 	<section class="type numeric-val">
 		<h3><code>CSSNumericValue</code></h3>
-		<p>Returned when the value is numeric. This is a superclass from which <code>CSSUnitValue</code> and <code>CSSMathValue</code> are derived, so one of these will be returned instead, depending on whether the value is determined via the <code>calc(), min(), max()</code> function or not.</p>
+		<p>Returned when the value is numeric. This is a superclass from which <code>CSSUnitValue</code> and <code>CSSMathValue</code> are derived, so one of these will be returned instead, depending on whether the value is determined a function like <code>calc()</code>, <code>min()</code>, or <code>max()</code>, or not.</p>
 	</section>
 
 	<section class="type unit-val">
@@ -73,7 +74,7 @@
 		<pre class="get-type language-js"><code>const cssUnitValue = allComputedStyles.get('border-top-width');
 <span class="comment">// Returns: </span></code></pre>
 
-		<p>With this type we can access the numeric value: <code>cssUnitVal.value</code> <em>and</em> it's unit: <code>cddUnitVal.unit</code></p>
+		<p>With this type we can access the numeric value: <code>cssUnitVal.value</code> <em>and</em> its unit: <code>cssUnitVal.unit</code></p>
 
 		<pre class="props language-js"><code>console.log(`Value: ${cssUnitVal.value}, Unit: ${cssUnitVal.unit}`);
 <span class="comment">// Logs: </span></code></pre>
@@ -81,7 +82,7 @@
 
 	<section class="type math-val">
 		<h3><code>CSSMathValue</code></h3>
-		<p>Returned if the CSS value is determined via the <code>calc(), min(), max()</code> functions, and the units specified are of different unit types.</p>
+		<p>Returned if the CSS value is determined via the <code>calc()</code>, <code>min()</code>, or <code>max()</code> functions, and the units specified are of different unit types.</p>
 
 		<pre class="get-type language-js"><code>const cssMathValue = allComputedStyles.get('width');
 <span class="comment">// Returns: </span></code></pre>
@@ -104,7 +105,7 @@ console.log(`Operator: ${cssMathVal.operator}, | Values: ${units}`)
 		<pre class="get-type language-js"><code>const cssTransformValue = allComputedStyles.get('transform');
 <span class="comment">// Returns: </span></code></pre>
 
-		<p>It returns a list of all the different transforms applied to the element and their different values. The transform determines what is returned. In our example here we just have a scale applied.</p>
+		<p>Returns a list of all the different transforms applied to the element and their different values. The transform determines what is returned. In our example here we just have a scale applied.</p>
 
 		<pre class="props language-js"><code>let scale = {}
 for (const transform of cssTransformVal) {
@@ -123,7 +124,7 @@ console.log(`is2D: ${scale.is2d}, | Coords: ${scale.vec}`);
 		<pre class="get-type language-js"><code>const cssUnparsedValue = allComputedStyles.get('--unit');
 <span class="comment">// Returns: </span></code></pre>
 
-		<p>This returns any values of a custom property that could be set or affecting said element. Here we're specifying which property we want.</p>
+		<p>This returns any values of a custom property that could be set or affect said element. Here we're specifying which property we want.</p>
 
 		<pre class="props language-js"><code>console.log(cssUnparseValue[0]);
 <span class="comment">// Logs: </span></code></pre>
@@ -132,7 +133,7 @@ console.log(`is2D: ${scale.is2d}, | Coords: ${scale.vec}`);
 	<section class="type variable">
 		<h3><code>CSSVariableReferenceValue</code></h3>
 
-		<p>If we want to <em>create</em> a custom property, rather than just retrieve it's value, we would use the <code>CSSVariableReferenceValue</code> type. This is not returned, as you can use any value with a custom property when setting it, however it can be defined when created. The value we enter here needs to be of type <code>CSSUnparsedValue</code></p>
+		<p>If we want to <em>create</em> a custom property, rather than just retrieve its value, we would use the <code>CSSVariableReferenceValue</code> type. This is not returned, as you can use any value with a custom property when setting it, however it can be defined when created. The value we enter here needs to be of type <code>CSSUnparsedValue</code>.</p>
 
 		<pre class="language-js"><code>const customProp = new CSSVariableReferenceValue('--secondColour', new CSSUnparsedValue(['black']));
 
@@ -146,7 +147,7 @@ console.log(customProp);
 	<section class="type parsing">
 		<h3>Parsing Properties & Values</h3>
 
-		<p>NB We can parse this last <code>CSSUnparsedValue</code> with a couple of methods we get with the <code>CSSStyleValue</code> type: <code>parse()</code> and <code>parseAll()</code>. As it's a numeric value we'll use <code>CSSNumericValue</code> parse method on the value. Let's take a look:</p>
+		<p>We can parse <code>CSSUnparsedValue</code> object instances with a couple of methods we get with the <code>CSSStyleValue</code> type: <code>parse()</code> and <code>parseAll()</code>. As it's a numeric value we'll use the <code>CSSNumericValue.parse()</code> method on the value. Let's take a look:</p>
 
 		<pre class="language-js"><code>const parsed = CSSNumericValue.parse(cssUnparseVal);
 console.log(parsed);
@@ -179,7 +180,7 @@ console.log(anotherParsed);
 	<p>Example created for MDN Docs: <a href="https://developer.mozilla.org/en-US/">See fill documentation here</a> </p>
 </footer>
 
-<script src="/sharedAssets/prism.js"></script>
+<script src="../../../sharedAssets/prism.js"></script>
 <script src="app.js"></script>
 
 </body>
