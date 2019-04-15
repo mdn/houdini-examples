@@ -63,7 +63,7 @@
 
 	<section class="type numeric-val">
 		<h3><code>CSSNumericValue</code></h3>
-		<p>Returned when the value is numeric. This is a superclass from which <code>CSSUnitValue</code> and <code>CSSMathValue</code> are derived, so one of these will be returned instead, depending on whether the value is determined via the <code>calc(), min(), max()</code> function or not.</p>
+		<p>Returned when the value is numeric. This is a superclass from which <code>CSSUnitValue</code> and <code>CSSMathSum</code> are derived, so one of these will be returned instead, depending on whether the value is determined via the <code>calc(), min(), max()</code> function or not.</p>
 	</section>
 
 	<section class="type unit-val">
@@ -80,20 +80,20 @@
 	</section>
 
 	<section class="type math-val">
-		<h3><code>CSSMathValue</code></h3>
+		<h3><code>CSSMathSum</code></h3>
 		<p>Returned if the CSS value is determined via the <code>calc(), min(), max()</code> functions, and the units specified are of different unit types.</p>
 
-		<pre class="get-type language-js"><code>const cssMathValue = allComputedStyles.get('width');
+		<pre class="get-type language-js"><code>const cssMathSum = allComputedStyles.get('width');
 <span class="comment">// Returns: </span></code></pre>
 
 		<p>With this type we can access the calculation that has occurred, as well as units involved in that calculation. These are returned as an array of <code>CSSUnitValues</code></p>
 		<pre class="props language-js"><code>let units = ''
 
-for (const unit of cssMathVal.values) {
+for (const unit of cssMathSum.values) {
 	units += ` value: ${unit.value}, unit: ${unit.unit}`;
 }
 
-console.log(`Operator: ${cssMathVal.operator}, | Values: ${units}`)
+console.log(`Operator: ${cssMathSum.operator}, | Values: ${units}`)
 <span class="comment">// Logs: </span></code></pre>
 	</section>
 
