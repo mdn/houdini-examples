@@ -6,6 +6,7 @@
   <meta name="description" content="Demonstration for Mozilla Developer Network using Typed OM.">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <link rel="stylesheet" href="../../../sharedAssets/shared-styles.css">
   <link rel="stylesheet" href="style.css">
 
   <style type="text/css">
@@ -26,11 +27,11 @@
 
 	<p>Now that we know all about the <code>CSSStyleValue</code> types, let's take a look at creating them and setting them on an element.</p>
 
-	<p>So far we've been working with <code>computedStyleMap</code> which returns all the properties and values affecting an element, but there is also the <code>attributeStyleMap</code> for getting and setting inline styles. This is much like our already commonly used <code>.style</code> method, and you might wonder why change something that works. With this new Typed OM method we also work with all the <code>CSSStyleValue</code> types, rather than just strings. This makes our code far more robust and flexible.</p>
+	<p>So far we've been working with <code>computedStyleMap</code>, which returns all the properties and values affecting an element, but there is also the <code>attributeStyleMap</code> for getting and setting inline styles. This is much like our already commonly used <code>style()</code> method, and you might wonder why we need to change something that works. With this new Typed OM method we also work with all the <code>CSSStyleValue</code> types, rather than just strings. This makes our code far more robust and flexible.</p>
 
-	<p>NB: Both the computed and attribute style maps are of type <code>StylePropertyMap</code> which is a map-like object, and so supports all the common methods like get/set/keys/values/entries making them intuitive to work with<sup>1</sup>. There is also <code>styleMap</code>	which is described further down.</p>
+	<p>Note: Both the computed and attribute style maps are of type <code>StylePropertyMap</code>, which is a map-like object, and so supports all the common methods like <code>get()</code>, <code>set()</code>, <code>keys()</code>, <code>values()</code>, and <code>entries()</code> — making them intuitive to work with<sup>1</sup>. There is also <code>styleMap</code>,	which is described further down.</p>
 
-	<p>Let's take a look at the methods available to us when using the <code>attributeStyleMap</code>. To simply add a style, and then retrieve it we can use the <code>set()</code> and <code>get()</code> methods.</p>
+	<p>Let's take a look at the methods available to us when using the <code>attributeStyleMap</code>. To simply add a style and then retrieve it, we can use the <code>set()</code> and <code>get()</code> methods.</p>
 
 	<pre class="language-js"><code>buttonEl.attributeStyleMap.set('padding-top', CSS.px(10));
 
@@ -69,7 +70,7 @@ Object.values(stylesheet.cssRules).forEach(block => {
 // Logs css block: button { --unit: 1.2rem; --mainColour: hsl(198, 100%, 66%); display: inline-block; padding: var(--unit) calc(var(--unit)*2); ...}
 </code></pre>
 
-	<p>Our methods already discussed are available to us and we can modify or update any of these properties like so:</p>
+	<p>The methods already discussed are available to us and we can modify or update any of these properties like so:</p>
 
 <pre class="language-js"><code>if (block.selectorText === '.example') {
 	block.styleMap.set('--mainColour', 'black');
@@ -78,7 +79,7 @@ Object.values(stylesheet.cssRules).forEach(block => {
 
 	<p>Might be worth noting this should be used with caution, as it's a pretty powerful way to update your styles.</p>
 
-	<p>Well done! You've covered all the basics for using Typed OM. There's quite a bit there and with all the values quite a bit still to think about (all the math sums for instance) There's <a href="../../reference/">a reference with resources here</a> and loads more information in the MDN docs.</p>
+	<p>Well done! You've covered all the basics of using Typed OM. There's quite a bit there and with all the values quite a bit still to think about (all the math sums for instance) There's <a href="../../reference/">a reference with resources here</a> and loads more information in the MDN docs.</p>
 
 	<p>There's <a href="">more examples here</a> of using Typed OM in practice.</p>
 
@@ -89,7 +90,7 @@ Object.values(stylesheet.cssRules).forEach(block => {
 	<p>Example created for MDN Docs: <a href="https://developer.mozilla.org/en-US/">See fill documentation here</a> </p>
 </footer>
 
-<script src="/sharedAssets/prism.js"></script>
+<script src="../../../sharedAssets/prism.js"></script>
 <script src="app.js"></script>
 
 </body>
