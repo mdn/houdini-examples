@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <title>Numeric Value 2: Math Values | Typed OM</title>
+  <meta name="description" content="Demonstration for Mozilla Developer Network using Typed OM.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="../../../sharedAssets/shared-styles.css">
+  <link rel="stylesheet" href="style.css">
+
+  <style type="text/css">
+
+  </style>
+
+</head>
+<body>
+
+<header>
+	<h2>CSS Houdini Collection</h2>
+	<h1>Typed OM Numeric Value: Math Values</h1>
+</header>
+
+<article class="houdini-demo typed-om">
+
+	<p>Let's see how we create a <code>CSSMathValue</code> and whilst doing so see what is available within the type:</p>
+
+	<pre><code class="language-js">const mathVal = new CSSMathSum(CSS.px(10), CSS.vw(20));
+/*
+Returns: CSSMathSum {
+	operator: "sum",
+	values: CSSNumericArray
+		0: CSSUnitValue {value: 10, unit: "px"},
+		1: CSSUnitValue {value: 20, unit: "vw"},
+		length: 2
+}
+*/</code></pre>
+
+	<p>This creates a new <code>CSSMathValue</code> with the operator type "sum". <code>CSSMathValue</code>s always take <code>CSSUnitValue</code>s. As you can see with what is created in the above example, <code>CSSMathSum</code> actually takes a <code>CSSNumericArray</code> which is an array of <code>CSSNumericValue</code>s.</p>
+
+	<p>If we use the <code>toString()</code> method on a <code>CSSMathValue</code>, it returns the ready made <code>calc()</code> function as a string. Handy.</p>
+
+	<pre class="language-js"><code>console.log(mathVal.toString());
+// Logs: calc(10px + 20vw)</code></pre>
+
+	<p>NB As with the previous part on numeric types, there is an associated <a href="">javascript file which you can find here</a>. It is logging code to the console which you can see in the developer tools pane.</p>
+
+	<p>Other <code>CSSMathValue</code> types that associate with the <code>calc()</code> function are 'sum', 'product', 'negate' and 'invert'. Each of the mathematical operations returns it's own interface. Here's an example of each them, how to create each, <code>set()</code> the value on an element and in turn <code>get()</code> that value to see the interface returned:</p>
+
+	<h3><code>CSSMathSum</code></h3>
+	<p>Addition &amp; Subtraction. Values are of type <code>CSSNumericValue</code> and it takes a <code>CSSNumericArray</code>, so you can put in as many values as you want.</p>
+
+	<pre><code class="language-js">const sumVal = new CSSMathSum(CSS.px(10), CSS.vw(20), CSS.em(1.2));
+
+el.attributeStyleMap.set('width', sumVal);
+
+const gotSumVal = el.attributeStyleMap.get('width');
+/*
+Returns: CSSMathSum {
+	operator: "sum",
+	values: CSSNumericArray
+		0: CSSUnitValue {value: 10, unit: "px"},
+		1: CSSUnitValue {value: 20, unit: "vw"},
+		2: CSSUnitValue {value: 1.2, unit: "em"},
+		length: 3
+}
+*/</code></pre>
+
+	<p>To subtract use a negative number</p>
+
+	<pre><code class="language-js">const subVal = new CSSMathSum(CSS.s(2), CSS.ms(-200));
+
+el.attributeStyleMap.set('animation-duration', subVal);
+
+const gotSubVal = el.attributeStyleMap.get('animation-duration');
+/*
+Returns: CSSMathSum {
+	operator: "sum",
+	values: CSSNumericArray
+		0: CSSUnitValue {value: 2, unit: "s"},
+		1: CSSUnitValue {value: -200, unit: "ms"},
+		length: 2
+}
+*/</code></pre>
+
+	<h3><code>CSSMathProduct</code></h3>
+	<p>Multiplication. Again here you can pass in a <code>CSSNumericArray</code>.</p>
+
+	<pre><code class="language-js">const productVal = new CSSMathProduct(CSS.em(1.6), CSS.number(1.2));
+
+el.attributeStyleMap.set('font-size', productVal);
+
+const gotProductVal = el.attributeStyleMap.get('font-size');
+/*
+Returns: CSSMathProduct {
+	operator: "product",
+	values: CSSNumericArray
+		0: CSSUnitValue {value: 1.6, unit: "em"},
+		1: CSSUnitValue {value: 1.2, unit: "number"},
+		length: 2
+}
+*/</code></pre>
+
+	<h3><code>CSSMathNegate</code></h3>
+	<p>Negation. Only takes one <code>CSSNumericValue</code>. Note here how we have to use the aforementioned <code>toString()</code> method, as the type itself does not negate the value, it just specifies it <em>is of</em> negated type.</p>
+
+	<pre><code class="language-js">const negVal = new CSSMathNegate(CSS.px(20));
+
+// negVal.toString() returns 'calc(-20px)'
+el.attributeStyleMap.set('margin-top', negVal.toString());
+
+const gotNegVal = el.attributeStyleMap.get('margin-top');
+/*
+Returns: CSSMathNegate {
+	operator: "negate",
+	value: CSSUnitValue {value: 20, unit: "px"}
+}
+*/</code></pre>
+
+	<!-- <h3><code>CSSMathInvert</code></h3>
+	<p>Inverts the given unit. This creates a calc function containing a fraction with 1 as the numerator and the specified unit as the denominator. Again we have to use <code>toString()</code> here to harness the <code>calc()</code> function.</p>
+
+	<pre><code class="language-js">const invVal = new CSSMathInvert(CSS.vh(10), CSS.number(2));
+
+el.attributeStyleMap.set('padding-bottom', invVal);
+
+const gotInvVal = el.attributeStyleMap.get('padding-bottom');
+	// Returned:
+	</code></pre> -->
+
+	<p>The <code>calc()</code> function is not the only mathematical function we have in CSS however, there is also the <code>min()</code>, <code>max()</code> and yet to be implemented <code>clamp()</code> functions. These all have their own <code>CSSMathValue</code> types. Let's take a look at creating each in turn, and what each interface contains.</p>
+
+	<h3><code>CSSMathMin</code></h3>
+	<p>Takes a <code>CSSNumericArray</code>. If you are unfamiliar with the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/min">min() function you can find out more here</a>.</p>
+
+	<pre><code class="language-js">const minVal = new CSSMathMin(CSS.vh(10), CSS.px(300));
+/*
+Returns: CSSMathMin {
+	operator: "min",
+	values: CSSNumericArray
+		0: CSSUnitValue {value: 10, unit: "vh"},
+		1: CSSUnitValue {value: 300, unit: "px"},
+		length: 2
+}
+*/</code></pre>
+
+	<p><code>CSSMathMax</code> Again, takes a <code>CSSNumericArray</code>. If you are unfamiliar with the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/max">max() function you can find out more here</a>.</p>
+
+	<pre><code class="language-js">const maxVal = new CSSMathMax(CSS.px(50), CSS.percent(20));
+/*
+Returns: CSSMathMax {
+	operator: "max",
+	values: CSSNumericArray
+		0: CSSUnitValue {value: 50, unit: "px"},
+		1: CSSUnitValue {value: 20, unit: "percent"},
+		length: 2
+}
+*/</code></pre>
+
+	<!-- <h3><code>CSSMathClamp</code></h3>
+	<p>Creates a <code>clamp()</code> CSS function, which clamps a value between an upper and lower bound. It takes three <code>CSSNumericValue</code>s. You can <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/clamp">read more about the <code>clamp()</code> function here</a>.</p>
+
+	<pre><code class="language-js">const clampVal = new CSSMathClamp(CSS.px(10), CSS.em(4), CSS.px(80));
+	</code></pre> -->
+
+	<h3>Nested calculations</h3>
+
+	<p>In CSS you can nest any of the above functions: <code>calc()</code>, <code>min()</code> or <code>max()</code>. Consider the following CSS: <code>min( calc(1.2em * 1.4), 10vw)</code>, to recreate this using <code>CSSMathValue</code>s we would also need to nest them:</p>
+
+	<pre><code class="language-js">const nestedVal = new CSSMathMin(
+  new CSSMathProduct(CSS.em(1.2), CSS.number(1.4)),
+  CSS.vw(10)
+);
+/*
+Returns: CSSMathMin {
+	operator: "min",
+	values: CSSNumericArray
+		0: CSSMathProduct {
+			operator: "product"
+			values: CSSNumericArray
+				0: CSSUnitValue {value: 1.2, unit: "em"},
+				1: CSSUnitValue {value: 1.4, unit: "number"},
+				length: 2
+			}
+		1: CSSUnitValue {value: 300, unit: "px"},
+		length: 2
+}
+*/
+</code></pre>
+
+	<p>On the surface this could seem overly complex, however it makes sense and we have to remember it's the underlying information about these <code>CSSValueTypes</code> that is being exposed and we have access to. It might be a bit to take in at this point, but as support starts to advance and we gain familiarity with this API, we'll probably wonder how we ever managed without it.</p>
+
+	<p>There is also more. There's methods that each <code>CSSNumericValue</code> is privy to, let's <a href="">check them out in the next part.</a></p>
+
+</article>
+
+<footer>
+	<p>Example created for MDN Docs: <a href="https://developer.mozilla.org/en-US/">See full documentation here</a> </p>
+</footer>
+
+<button class="example"></button>
+
+<script src="../../../sharedAssets/prism.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>

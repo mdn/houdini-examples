@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <title>Numeric Value 3: Methods | Typed OM</title>
+  <meta name="description" content="Demonstration for Mozilla Developer Network using Typed OM.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="../../../sharedAssets/shared-styles.css">
+  <link rel="stylesheet" href="style.css">
+
+  <style type="text/css">
+
+  </style>
+
+</head>
+<body>
+
+<header>
+	<h2>CSS Houdini Collection</h2>
+	<h1>Typed OM Numeric Value: Methods</h1>
+</header>
+
+<article class="houdini-demo typed-om">
+
+	<p>The maths doesn't stop there. <code>CSSNumericValue</code>s come with their own set of operations that can be performed on all numeric values. What operation you use and with what values, depends on what is returned. Let's take a look at all the methods and a few examples of each. As these methods are available on the <code>CSSNumericValue</code> super class they can take a unit or a sum.</p>
+
+	<h3><code>add</code></h3>
+
+	<pre><code class="language-js">let sum = CSS.px(54).add(CSS.px(30));
+// Returns: CSSUnitValue {value: 84, unit: "px"}</code></pre>
+
+	<p>In the above example we are using the same unit, and so a direct addition takes place and a <code>CSSUnitValue</code> is returned. If we use varying units, a <code>CSSMathValue</code> is returned.</p>
+
+	<pre class="language-js"><code>let add = CSS.px(54).add(CSS.em(2.4));
+add.toString() // calc(54px + 2.4em)
+	</code></pre>
+
+	<h3><code>sub</code></h3>
+
+	<pre><code class="language-js">let sub = CSS.mm(300).sub(CSS.mm(210));
+// Returns: CSSUnitValue {value: 90, unit: "mm"}</code></pre>
+
+	<p>As with <code>add</code> above, if we use different units a <code>CSSMathValue</code> is returned</p>
+
+	<pre class="language-js"><code>let sub = CSS.cm(5).add(CSS.mm(90));
+sub.toString() // calc(5cm + -90mm)</code></pre>
+
+	<h3><code>mul</code></h3>
+
+	<p>Notice here you can pass in just a number to the multiply function. A <code>CSSNumericValue</code> would work as well. Differing values will return a <code>CSSMathValue</code>.</p>
+
+	<pre><code class="language-js">let mul = CSS.em(1.2).mul(1.4);
+// Returns: CSSUnitValue {value: 1.68, unit: "em"}</code></pre>
+
+	<h3><code>div</code></h3>
+
+	<p>As with <code>mul</code> you can enter a number or a <code>CSSNumericValue</code>. Different units return a <code>CSSMathValue</code></p>
+
+	<pre><code class="language-js">let div = CSS.turn(1).div(2);
+// Returns: CSSUnitValue {value: 0.5, unit: "turn"}</code></pre>
+
+	<h3><code>min</code></h3>
+
+	<p><code>min</code> returns the lowest value, and you can input as many values as you please. If the units differ a <code>CSSMathMin</code> type is returned with the values and units that have been used.</p>
+
+	<pre><code class="language-js">let min = CSS.px(500).min(CSS.px(400), CSS.px(200));
+// Returns: CSSUnitValue {value: 200, unit: "px"}
+
+min = CSS.em(1.2).min(CSS.rem(1.4));
+min.toString() // min(1.2em, 1.4rem)</code></pre>
+
+	<h3><code>max</code></h3>
+
+	<p>Same as <code>min</code>, however it returns the maximum value in the list, or if the units differ, a <code>CSSMathMax</code> type</p>
+
+	<pre><code class="language-js">let max = CSS.pt(50).max(CSS.pt(90), CSS.pt(10));
+// Returns: CSSUnitValue {value: 90, unit: "pt"}
+
+max = CSS.px(500).max(CSS.percent(60));
+max.toString() // max(500px, 60%)</code></pre>
+
+	<h3>Conversion & Comparison</h3>
+
+	<p>Maths methods are pretty useful, so is a way to convert units on the fly. We can do that with the <code>to</code> method.</p>
+
+	<h3><code>to</code></h3>
+
+	<p>It only allows us to convert absolute units. (Unfortunately not relative ones at this time).</p>
+
+	<pre><code class="language-js">// inches to centimetres
+const cm = CSS.in(2).to('cm');
+// Returns: CSSUnitValue {value: 5.08, unit: "cm"}</code></pre>
+
+	<h3><code>equals</code></h3>
+	<p>Another very interesting bit of functionality. We can test to see if one value is equal to another with just one method.</p>
+
+	<pre><code class="language-js">const fontSize = CSS.em(1.2);
+CSS.em(1.2).equals(fontSize); // true</code></pre>
+
+	<p>When using these latter two pieces of functionality together we can do some clever stuff, like convert degrees to radians and check it within our code, without having to know the precise radian value, which is always a bit trickier to remember than degrees.</p>
+
+	<pre><code class="language-js">const radians = CSS.deg(90).to('rad');
+
+const check = CSS.deg(90).equals(radians.to('deg')); // true
+	</code></pre>
+
+	<p>Let's have a look at an <a href="">example using what we have learnt so far</a></p>
+
+</article>
+
+<footer>
+	<p>Example created for MDN Docs: <a href="https://developer.mozilla.org/en-US/">See full documentation here</a> </p>
+</footer>
+
+<button class="example"></button>
+
+<script src="../../../sharedAssets/prism.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
