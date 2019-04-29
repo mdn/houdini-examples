@@ -1,0 +1,22 @@
+@import '/sharedAssets/shared-styles.css';
+
+.map {
+	margin: var(--unit) auto;
+	width: 80vw; height: 40vw;
+	border: 2px solid var(--teal);
+	position: relative;
+}
+.map__image img {
+	height: 100%; width: 100%;
+	display: block;
+	object-fit: cover;
+}
+.map__image figcaption {
+	position: absolute;
+	bottom:0px; right: 20px;
+}
+
+.map .marker {
+	position: absolute;
+	width: 34px; height: 31px;
+}

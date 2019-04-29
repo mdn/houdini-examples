@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <title>Numeric Value 1: Unit Values | Typed OM</title>
+  <meta name="description" content="Demonstration for Mozilla Developer Network using Typed OM.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="../../../sharedAssets/shared-styles.css">
+  <link rel="stylesheet" href="style.css">
+
+  <style type="text/css">
+
+  </style>
+
+</head>
+<body>
+
+<header>
+	<h2>CSS Houdini Collection</h2>
+	<h1>Typed OM Numeric Value: Unit Values</h1>
+</header>
+
+<article class="houdini-demo typed-om">
+
+	<p>Here we'll take a more in depth look at the <code>CSSNumericValue</code> type. As we've seen it's the super class for both the <code>CSSUnitValue</code> and <code>CSSMathValue</code>.</p>
+
+	<p>Let's start by looking at the <code>CSSUnitValue</code>, the different types of units there are and different ways to create them.</p>
+
+	<p>Before we do that, let's refresh what's returned if a value is of type <code>CSSunitValue</code></p>
+
+	<p>NB Due to the nature of code examples on this page, the javascript file is logging results to the console, (rather than affecting an element as in the intro), so you can view the code running in the developer tools pane and you can find the <a href="">javascript file here</a></p>
+
+	<pre class="language-js"><code>const el = document.querySelector('h2');
+
+// set line-height
+el.attributeStyleMap.set('line-height', '1.3');
+
+// get line-height
+const lineHeight = el.attributeStyleMap.get('line-height');
+// Returns: CSSUnitValue {value: 1.3, unit: "number"}</code></pre>
+
+	<p>Here we are setting a <code>line-height</code> value on an <code>h2</code> element and retrieving it again with the <code>set()</code> and <code>get()</code> methods of the <code>attributeStyleMap</code> property.</p>
+
+	<p>A CSSUnitValue is returned, which contains a value and a unit. Here the unit is of type 'number'. Let's see how we <em>create</em> a <code>CSSUnitValue</code> and while we're at it a couple of different unit types.</p>
+
+	<h3>Creating a unit value</h3>
+
+	<p>There are two ways to do this. The first is to create the object directly:</p>
+
+	<pre><code class="language-js">const percentVal = new CSSUnitValue(50, 'percent');
+// Returns: CSSUnitValue {value: 50, unit: "percent"}</code></pre>
+
+	<p>Here we're creating a percent unit with 50 as it's value, the equivalent of <code>50%</code> in CSS.</p>
+
+	<p>The other way is using the factory method, in practise it creates the same and for the most part would be preferable as the code is simpler.</p>
+
+	<pre><code class="language-js">const pixelVal = CSS.px(42);
+// Returns: CSSUnitValue {value: 42, unit: "pixel"}</code></pre>
+
+	<p>Both of these methods can accept a string instead of a number as it's value and will still parse.</p>
+
+	<pre><code class="language-js">const emVal = new CSSUnitValue('1.2', 'em');
+// Returns: CSSUnitValue {value: 1.2, unit: "em"}
+
+const remVal = CSS.rem('2.4', 'rem');
+// Returns: CSSUnitValue {value: 2.4, unit: "rem"}</code></pre>
+
+	<h3>Different unit types</h3>
+
+	<p>In the examples above we've seen number, percent and length type units. There are also angle, time, frequency, resolution and flex; eight altogether. Here's a list of all the units, sorted by type, with examples of how to create them with both methods.</p>
+
+	<p>NB Remember you can use a string instead of a number in any of these examples.</p>
+
+	<h4>Number</h4>
+
+	<pre><code class="language-js">const numVal = new CSSUnitValue(1.2, 'number');
+// or
+const numVal = CSS.number(1.2);
+// Returns: CSSUnitValue {value: 1.2, unit: "number"}</code></pre>
+
+	<h4>Percent</h4>
+
+	<pre><code class="language-js">const percentVal = new CSSUnitValue(30, 'percent');
+// or
+const percentVal = CSS.percent(30);
+// Returns: CSSUnitValue {value: 30, unit: "percent"}</code></pre>
+
+	<h4 id="length">Length</h4>
+
+	<p>There are lots of different length values you can use in CSS. <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/length">Here is a link to the relevant documentation for each in this list</a> in case you're unfamiliar with the unit.</p>
+
+	<p><code>em</code></p>
+
+	<pre><code class="language-js">const emVal = new CSSUnitValue(1.2, 'em');
+// or
+const emVal = CSS.em(1.2);
+// Returns: CSSUnitValue {value: 1.2, unit: "em"}</code></pre>
+
+	<p><code>rem</code></p>
+
+	<pre><code class="language-js">const remVal = new CSSUnitValue(2.4, 'rem');
+// or
+const remVal = CSS.rem(2.4);
+// Returns: CSSUnitValue {value: 2.4, unit: "rem"}</code></pre>
+
+	<p><code>ch</code></p>
+
+	<pre><code class="language-js">const chVal = new CSSUnitValue(2, 'ch');
+// or
+const chVal = CSS.ch(2);
+// Returns: CSSUnitValue {value: 2, unit: "ch"}</code></pre>
+
+	<p><code>ex</code></p>
+
+	<pre><code class="language-js">const exVal = new CSSUnitValue(1.6, 'ex');
+// or
+const exVal = CSS.ex(1.6);
+// Returns: CSSUnitValue {value: 1.6, unit: "ex"}</code></pre>
+
+	<p><code>vw</code></p>
+
+	<pre><code class="language-js">const vwVal = new CSSUnitValue(40, 'vw');
+// or
+const vwVal = CSS.vw(40);
+// Returns: CSSUnitValue {value: 40, unit: "vw"}</code></pre>
+
+	<p><code>vh</code></p>
+
+	<pre><code class="language-js">const vhVal = new CSSUnitValue(60, 'vh');
+// or
+const vhVal = CSS.vh(60);
+// Returns: CSSUnitValue {value: 60, unit: "vh"}</code></pre>
+
+	<p><code>vmin</code></p>
+
+	<pre><code class="language-js">const vminVal = new CSSUnitValue(50, 'vmin');
+// or
+const vminVal = CSS.vmin(50);
+// Returns: CSSUnitValue {value: 50, unit: "vmin"}</code></pre>
+
+	<p><code>vmax</code></p>
+
+	<pre><code class="language-js">const vmaxVal = new CSSUnitValue(40, 'vmax');
+// or
+const vmaxVal = CSS.vmax(40);
+// Returns: CSSUnitValue {value: 40, unit: "vmax"}</code></pre>
+
+	<p><code>px</code></p>
+
+	<pre><code class="language-js">const pxVal = new CSSUnitValue(10, 'px');
+// or
+const pxVal = CSS.px(10);
+// Returns: CSSUnitValue {value: 10, unit: "px"}</code></pre>
+
+	<p><code>cm</code></p>
+
+	<pre><code class="language-js">const cmVal = new CSSUnitValue(5, 'cm');
+// or
+const cmVal = CSS.cm(5);
+// Returns: CSSUnitValue {value: 5, unit: "cm"}</code></pre>
+
+	<p><code>mm</code></p>
+
+	<pre><code class="language-js">const mmVal = new CSSUnitValue(15, 'mm');
+// or
+const mmVal = CSS.mm(15);
+// Returns: CSSUnitValue {value: 15, unit: "mm"}</code></pre>
+
+	<p><code>Q</code></p>
+
+	<pre><code class="language-js">const QVal = new CSSUnitValue(100, 'Q');
+// or
+const QVal = CSS.Q(100);
+// Returns: CSSUnitValue {value: 100, unit: "q"}</code></pre>
+
+	<p><code>in</code></p>
+
+	<pre><code class="language-js">const inVal = new CSSUnitValue(60, 'in');
+// or
+const inVal = CSS.in(60);
+// Returns: CSSUnitValue {value: 60, unit: "in"}</code></pre>
+
+	<p><code>pc</code></p>
+
+	<pre><code class="language-js">const pcVal = new CSSUnitValue(12, 'pc');
+// or
+const pcVal = CSS.pc(12);
+// Returns: CSSUnitValue {value: 12, unit: "pc"}</code></pre>
+
+	<p><code>pt</code></p>
+
+	<pre><code class="language-js">const ptVal = new CSSUnitValue(72, 'pt');
+// or
+const ptVal = CSS.pt(72);
+// Returns: CSSUnitValue {value: 72, unit: "pt"}</code></pre>
+
+	<p>NB: The following are all length units but have not been implemented at the time of writing: <code>ic</code> <code>lh</code> <code>rlh</code> <code>vi</code> <code>vb</code></p>
+
+	<h4>Angle</h4>
+
+	<p>There is a reference for <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/angle">all angle type units here.</a></p>
+
+	<p><code>deg</code></p>
+
+	<pre><code class="language-js">const degVal = new CSSUnitValue(180, 'deg');
+// or
+const degVal = CSS.deg(180);
+// Returns: CSSUnitValue {value: 180, unit: "deg"}</code></pre>
+
+	<p><code>grad</code></p>
+
+	<pre><code class="language-js">const gradVal = new CSSUnitValue(200, 'grad');
+// or
+const gradVal = CSS.grad(200);
+// Returns: CSSUnitValue {value: 200, unit: "grad"}</code></pre>
+
+	<p><code>rad</code></p>
+
+	<pre><code class="language-js">const radVal = new CSSUnitValue(3.1, 'rad');
+// or
+const radVal = CSS.rad(3.1);
+// Returns: CSSUnitValue {value: 3.1, unit: "rad"}</code></pre>
+
+	<p><code>turn</code></p>
+
+	<pre><code class="language-js">const turnVal = new CSSUnitValue(0.5, 'turn');
+// or
+const turnVal = CSS.turn(0.5);
+// Returns: CSSUnitValue {value: 0.5, unit: "turn"}</code></pre>
+
+	<h4 id="time">Time</h4>
+
+	<p>There is a <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/time">reference for time units here.</a></p>
+
+	<p><code>s</code></p>
+
+	<pre><code class="language-js">const sVal = new CSSUnitValue(1, 's');
+// or
+const sVal = CSS.s(1);
+// Returns: CSSUnitValue {value: 1, unit: "s"}</code></pre>
+
+	<p><code>ms</code></p>
+
+	<pre><code class="language-js">const msVal = new CSSUnitValue(200, 'ms');
+// or
+const msVal = CSS.ms(200);
+// Returns: CSSUnitValue {value: 200, unit: "ms"}</code></pre>
+
+	<h4 id="frequency">Frequency</h4>
+
+	<p>The reference for <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/frequency">frequency units can be found here</a>.</p>
+
+	<p><code>Hz</code></p>
+
+	<pre><code class="language-js">const HzVal = new CSSUnitValue(440, 'Hz');
+// or
+const HzVal = CSS.Hz(440);
+// Returns: CSSUnitValue {value: 440, unit: "hz"}</code></pre>
+
+	<p><code>kHz</code></p>
+
+	<pre><code class="language-js">const kHzVal = new CSSUnitValue(3, 'kHz');
+// or
+const kHzVal = CSS.kHz(3);
+// Returns: CSSUnitValue {value: 3, unit: "khz"}</code></pre>
+
+	<h4 id="resolution">Resolution</h4>
+
+	<p>There is a reference for all <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/resolution">resolution units here.</a></p>
+
+	<p><code>dpi</code></p>
+
+	<pre><code class="language-js">const dpiVal = new CSSUnitValue(3, 'dpi');
+// or
+const dpiVal = CSS.dpi(3);
+// Returns: CSSUnitValue {value: 3, unit: "dpi"}</code></pre>
+
+	<p><code>dpcm</code></p>
+
+	<pre><code class="language-js">const dpcmVal = new CSSUnitValue(2.54, 'dpcm');
+// or
+const dpcmVal = CSS.dpcm(2.54);
+// Returns: CSSUnitValue {value: 2.54, unit: "dpcm"}</code></pre>
+
+	<p><code>dppx</code></p>
+
+	<pre><code class="language-js">const dppxVal = new CSSUnitValue(1, 'dppx');
+// or
+const dppxVal = CSS.dppx(1);
+// Returns: CSSUnitValue {value: 1, unit: "dppx"}</code></pre>
+
+	<h4 id="flex">Flex</h4>
+
+	<p>The flex CSS property sets how a flex item will grow or shrink to fit the space available in its flex container. <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/flex">You can read more about it here.</a></p>
+
+	<p><code>fr</code></p>
+
+	<pre><code class="language-js">const frVal = new CSSUnitValue(1, 'fr');
+// or
+const frVal = CSS.fr(1);
+// Returns: CSSUnitValue {value: 1, unit: "fr"}</code></pre>
+
+	<p>NB These only create numeric values. If, for instance, you wanted to create a <code>flex: auto;</code> CSS syntax you would need to use the CSSKeywordVaue type instead.</p>
+
+	<p>There's a lot of different unit types, but it makes sense they are all implemented. Now let's see the other <code>CSSNumericValue</code> sub class: <code>CSSMathValue</code> <a href="../02mathValue/">in the next section.</a></p>
+
+</article>
+
+<footer>
+	<p>Example created for MDN Docs: <a href="https://developer.mozilla.org/en-US/">See full documentation here</a> </p>
+</footer>
+
+<script src="../../../sharedAssets/prism.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <title>Typed OM Example 1: Map</title>
+  <meta name="description" content="Demonstration for Mozilla Developer Network using Typed OM.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="../../../sharedAssets/shared-styles.css">
+  <link rel="stylesheet" href="style.css">
+
+  <style type="text/css">
+
+  </style>
+
+</head>
+<body>
+
+<header>
+	<h2>CSS Houdini Collection</h2>
+	<h1>Typed OM Example 1: Map</h1>
+</header>
+
+<article class="houdini-demo typed-om">
+
+	<p>Let's start by building a example of placing items where a mouse or pointer is clicked: A map where you can place markers.</p>
+
+	<p>We can take the mouse co-ordinates and know where to position a created item. This will be a lot easier with Typed OM as we can use numbers and units rather than strings.</p>
+
+	<p>We'll have an image of a map and where we click on the map a marker will appear, to either represent somewhere we wish to go or have been, for example.</p>
+
+	<p>The focus here is on how we use Typed OM - so let's keep the HTML and CSS simple to start. We'll just have the map as an image and when we click an SVG will be added. We'll absolutely position each marker, with the top and left values being added based on mouse position on click.</p>
+
+	<p>Let's start with the HTML and CSS.</p>
+
+	<pre><code class="language-html">&lt;div class="map">
+	&lt;figure class="map__image">
+		&lt;img src="world-map.jpg" alt="A picture of the map of the world" />
+		&lt;figcaption>Image from: https://mapswire.com/world/physical-maps/&lt;/figcaption>
+	&lt;/figure>
+&lt;/div></code></pre>
+
+	<pre><code class="css language-css">.map {
+	margin: 20px auto;
+	width: 80vw; height: 40vw;
+	border: 2px solid var(--teal);
+	position: relative;
+}
+.map__image img {
+	height: 100%; width: 100%;
+	display: block;
+	object-fit: cover;
+}
+.map__image figcaption {
+	position: absolute;
+	bottom:0px; right: 20px;
+}
+.map .marker {
+	position: absolute;
+	width: 34px; height: 31px;
+}</code></pre>
+
+	<div class="map">
+		<figure class="map__image">
+			<img src="world-map.jpg" alt="A picture of the map of the world" />
+			<figcaption>Image from: https://mapswire.com/world/physical-maps/</figcaption>
+		</figure>
+	</div>
+
+	<p>We'll set up our javaScript by making sure we have the containing <code>.map</code> div and making a function that creates the svg marker image.</p>
+
+	<pre class="language-js"><code>const mapEl = document.querySelector('.map');
+mapEl.x = mapEl.getBoundingClientRect().x;
+mapEl.y = mapEl.getBoundingClientRect().y;
+
+function createMarker() {
+	const markerImg = {};
+	marker.img = document.createElement('img');
+	marker.img.src = 'marker.svg';
+	marker.img.alt = 'Map marker';
+	marker.img.classList.add('marker');
+	markerImg.height = CSS.px(31);
+	markerImg.width = CSS.px(34);
+	return markerImg;
+}</code></pre>
+
+	<p>The SVG is an inverted arrow shape, so we'll place it at the tip where the mouse clicks. For this we'll need the width and height of the SVG, note in the function above we're creating <code>CSSUnitValue</code>'s for both of these properties.</p>
+
+	<p>When the user clicks to place a marker, we need to calculate the <code>top</code> and <code>left</code> position values. For this we'll need the mouse coordinates, given to us by the click event, the maps position and the SVG's dimensions. Below is how we'll calculate the <code>top</code> value.</p>
+
+	<pre class="language-js"><code>marker.top = new CSSUnitValue(e.clientY - mapEl.y - marker.width.value, 'px')</code></pre>
+
+	<p>Using Typed OM, we can both create a <code>CSSUnitValue</code> and set it on the SVG image.</p>
+
+	<pre class="language-js"><code>marker.img.attributeStyleMap.set('top', marker.top);</code></pre>
+
+	<p>Anyway, this is great, because we can work in numbers and carry on working in numbers. No strings here.</p>
+
+	<p>Here's all the code within the click event.</p>
+
+	<pre class="language-js"><code>mapEl.addEventListener('click', function(e) {
+
+mapEl.x = mapEl.getBoundingClientRect().x;
+mapEl.y = mapEl.getBoundingClientRect().y;
+
+const marker = createMarker();
+
+marker.top = new CSSUnitValue(e.clientY - mapEl.y - marker.height.value, 'px')
+marker.left = CSS.px(e.clientX - mapEl.x - marker.width.value/2);
+
+marker.img.attributeStyleMap.set('top', marker.top);
+marker.img.attributeStyleMap.set('left', marker.left);
+
+mapEl.appendChild(marker.img);
+
+}, false)</code></pre>
+
+	<p>But what's going to happen if the window changes size. We've set absolute values. We are, however, working with numbers so we can set a percentage, rather than a pixel.</p>
+
+	<p>We'll create a ratio based on the dimensions of the map element and use that to create a percentage value instead of a pixel value for positioning.</p>
+
+	<pre class="language-js"><code>mapEl.widthRatio = 100/mapEl.getBoundingClientRect().width;
+
+const top = (e.clientY - mapEl.y - marker.height.value) * mapEl.heightRatio;
+
+marker.top = CSS.percent(top)</code></pre>
+
+	<p>Here's the final code:</p>
+
+	<pre class="language-js"><code>const mapEl = document.querySelector('.map');
+mapEl.widthRatio = 100/mapEl.getBoundingClientRect().width;
+mapEl.heightRatio = 100/mapEl.getBoundingClientRect().height;
+
+function createMarker() {
+	const markerImg = {};
+	markerImg.img = document.createElement('img');
+	markerImg.img.src = 'marker.svg';
+	markerImg.img.alt = 'Map marker';
+	markerImg.img.classList.add('marker');
+	markerImg.height = CSS.px(31);
+	markerImg.width = CSS.px(34);
+	return markerImg;
+}
+
+mapEl.addEventListener('click', function(e) {
+
+	mapEl.x = mapEl.getBoundingClientRect().x;
+	mapEl.y = mapEl.getBoundingClientRect().y;
+
+	const marker = createMarker();
+
+	const top = (e.clientY - mapEl.y - marker.height.value) * mapEl.heightRatio;
+	const left = (e.clientX - mapEl.x - marker.width.value/2) * mapEl.widthRatio;
+
+	marker.top = CSS.percent(top);
+	marker.left = CSS.percent(left);
+
+	marker.img.attributeStyleMap.set('top', marker.top);
+	marker.img.attributeStyleMap.set('left', marker.left);
+
+	mapEl.appendChild(marker.img);
+
+}, false)</code></pre>
+
+
+	<p>The benefits of this are not just better typing and using less strings, but we can just set one position and not have to worry about calling any code on window resize.</p>
+
+</article>
+
+<footer>
+	<p>Example created for MDN Docs: <a href="https://developer.mozilla.org/en-US/">See full documentation here</a> </p>
+</footer>
+
+<script src="../../../sharedAssets/prism.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
