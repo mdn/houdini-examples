@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <title>Transform Values Example | Typed OM</title>
+  <meta name="description" content="Demonstration for Mozilla Developer Network using Typed OM.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="../../../sharedAssets/shared-styles.css">
+  <link rel="stylesheet" href="style.css">
+
+  <style type="text/css">
+
+  </style>
+
+</head>
+<body>
+
+<header>
+	<h2>CSS Houdini Collection</h2>
+	<h1>Typed OM Transform Values Example</h1>
+</header>
+
+<article class="houdini-demo typed-om">
+
+	<p>Now we have all this transform power, let's use it to create an example. It is Houdini after all. How about some magical sparkles.</p>
+
+	<p>We'll create some randomised SVG images, that appear when the mouse is dragged around an area. We can do all of this within javaScript.</p>
+
+	<section class="sparkleArea"></section>
+
+	<p>Let's set up our area and style it.</p>
+
+	<pre><code class="language-html">&lt;section class="sparkleArea">&lt;/section></code></pre>
+
+	<pre><code class="language-css">.sparkleArea {
+	position: relative;
+	height: 50vw;
+	background-color: hsl(234,42%,42%);
+	overflow: hidden;
+}</code></pre>
+
+	<p>Now let's create a <code>Sparkle</code> class, which creates the image and all it's randomised <em>transforms</em>. We can create new sparkles when the mouse moves around the area.</p>
+
+	<pre><code class="language-js">class Sparkle {
+
+	constructor(originX, originY) {
+		this.x = CSS.px(originX);
+		this.y = CSS.px(originY);
+		this.img = this.createImage();
+	}
+
+}</code></pre>
+
+	<p>We'll look at the <code>createImage()</code> method later, first let's look at all the methods to define the position, rotation and scaling.</p>
+
+	<p>Each sparkle will be positioned absolutely based on the mouse coordinates, but offset slightly. We'll create a new <code>CSSTranslateValue</code> with the randomised offset.</p>
+
+	<pre><code class="js language-js">get _translate() {
+	const shift = Math.floor(Math.random() * 40) - 20;
+	return new CSSTranslate(
+		CSS.px(shift),
+		CSS.px(shift)
+	)
+}</code></pre>
+
+	<p>We'll use similar methods for both rotating and scaling our sparkles, each can return a <code>CSSRotate</code> value and <code>CSSScale</code> respectively:</p>
+
+	<pre><code class="language-js">get _rotate() {
+	return new CSSRotate(CSS.turn(Math.random()));
+}
+
+get _scale() {
+	const scaleVal = Math.random() * 2;
+	return new CSSScale(CSS.number(scaleVal), CSS.number(scaleVal));
+}
+</code></pre>
+
+	<p>Now we can pop all of these into a <code>CSSTransformValue</code>.</p>
+
+	<pre><code class="language-js">get transform() {
+	return new CSSTransformValue([
+		this._translate,
+		this._rotate,
+		this._scale
+	])
+}</code></pre>
+
+	<p>We want the sparkle to fade over time, we can do this by creating an animation where the start opacity is 1 and the end opacity is 0, and making sure all sparkles have this animation. We can do most of this in the CSS</p>
+
+	<pre><code class="css language-css">.sparkle {
+	position: absolute;
+	animation-name: fadeOut;
+	animation-timing-function: ease-in;
+	opacity: 0;
+}
+
+@keyframes fadeOut {
+	from {opacity: 1;}
+	to {opacity: 0;}
+}</code></pre>
+
+	<p>When the image is shown we can set the <code>animation-duration</code> property to a random amount of milliseconds. We can create a <code>CSSUnitValue</code> for this.</p>
+
+	<pre><code class="js language-js">get _timeAlive() {
+	return CSS.ms(Math.ceil(Math.random()*500))
+}</code></pre>
+
+	<p>We have four different SVGs to choose from for the source of our sparkle. Let's create a method to pick one at random:</p>
+
+	<pre><code class="js language-js">get _pickSource() {
+	const svgs = ['star.svg', 'cross.svg', 'square.svg', 'circle.svg'];
+	const pick = Math.floor(Math.random()*4);
+	return svgs[pick];
+}</code></pre>
+
+	<p>And finally we need the <code>createImage()</code> method, which creates an image element, set's it's source and other attributes and applies the styles we've created with the above methods.</p>
+
+	<pre><code class="js language-js">createImage() {
+	const image = document.createElement('img');
+	image.src = this._pickSource;
+	image.alt = 'sparkle';
+	image.classList.add('sparkle');
+	image.attributeStyleMap.set('left', this.x);
+	image.attributeStyleMap.set('top', this.y);
+	image.attributeStyleMap.set('transform', this.transform);
+	image.attributeStyleMap.set('animation-duration', this._timeAlive);
+	return image;
+}
+	</code></pre>
+
+	<p>The entire class now looks like this:</p>
+
+	<pre><code class="language-js">class Sparkle {
+
+	constructor(originX, originY) {
+		this.x = CSS.px(originX);
+		this.y = CSS.px(originY);
+		this.img = this.createImage();
+	}
+
+	get _translate() {
+		const shift = Math.floor(Math.random() * 40) - 20;
+		return new CSSTranslate(
+			CSS.px(shift),
+			CSS.px(shift)
+		)
+	}
+
+	get _rotate() {
+		return new CSSRotate(CSS.turn(Math.random()));
+	}
+
+	get _scale() {
+		const scaleVal = Math.random() * 2;
+		return new CSSScale(CSS.number(scaleVal), CSS.number(scaleVal));
+	}
+
+	get transform() {
+		return new CSSTransformValue([
+			this._translate,
+			this._rotate,
+			this._scale
+		])
+	}
+
+	get _pickSource() {
+		const svgs = ['star.svg', 'cross.svg', 'square.svg', 'circle.svg'];
+		const pick = Math.floor(Math.random()*4);
+		return svgs[pick];
+	}
+
+	get _timeAlive() {
+		return CSS.ms(Math.ceil(Math.random()*500))
+	}
+
+	createImage() {
+		const image = document.createElement('img');
+		image.src = this._pickSource;
+		image.alt = 'sparkle';
+		image.classList.add('sparkle');
+		image.attributeStyleMap.set('left', this.x);
+		image.attributeStyleMap.set('top', this.y);
+		image.attributeStyleMap.set('transform', this.transform);
+		image.attributeStyleMap.set('animation-duration', this._timeAlive);
+		return image;
+	}
+
+}</code></pre>
+
+	<p>All that's left to do is pick the <code>.sparkleboard</code> element and add a <code>mousemove</code> event, so we can create new sparkles when we move the mouse over it.</p>
+
+	<p>Note we also need the bounding rectangle of the element to adjust for the correct mouse coordinates.</p>
+
+	<pre><code class="language-js">const sparkleBoard = document.querySelector('.sparkleArea');
+let boardDimensions = sparkleBoard.getBoundingClientRect();
+let x = 0;
+let y = 0;
+
+sparkleBoard.addEventListener('mousemove', function(e) {
+
+	boardDimensions = sparkleBoard.getBoundingClientRect();
+	x = e.clientX - boardDimensions.left;
+	y = e.clientY - boardDimensions.top;
+
+	const spark = new Sparkle(x, y);
+
+	sparkleBoard.appendChild(spark.img);
+
+	// quick and dirty way to remove sparkles from DOM to help performance
+	setTimeout(() => sparkleBoard.firstChild.remove(), 500);
+
+}, false);</code></pre>
+
+	<p><a href="">You can see the final code here</a></p>
+
+</article>
+
+<footer>
+	<p>Example created for MDN Docs: <a href="https://developer.mozilla.org/en-US/">See full documentation here</a> </p>
+</footer>
+
+<script src="../../../sharedAssets/prism.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>

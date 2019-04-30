@@ -1,0 +1,24 @@
+@import '/sharedAssets/shared-styles.css';
+
+:root {
+	--navy: hsl(234,42%,42%);
+}
+
+.sparkleArea {
+	position: relative;
+	height: 50vw;
+	background-color: var(--navy);
+	overflow: hidden;
+}
+
+.sparkle {
+	position: absolute;
+	animation-name: fadeOut;
+	animation-timing-function: ease-in;
+	opacity: 0;
+}
+
+@keyframes fadeOut {
+	from {opacity: 1;}
+	to {opacity: 0;}
+}

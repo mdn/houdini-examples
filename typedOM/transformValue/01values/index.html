@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <title>Transform Values | Typed OM</title>
+  <meta name="description" content="Demonstration for Mozilla Developer Network using Typed OM.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="../../../sharedAssets/shared-styles.css">
+  <link rel="stylesheet" href="style.css">
+
+  <style type="text/css">
+
+  </style>
+
+</head>
+<body>
+
+<header>
+	<h2>CSS Houdini Collection</h2>
+	<h1>Typed OM Transform Values</h1>
+</header>
+
+<article class="houdini-demo typed-om">
+
+	<p>CSS Transform property has it's own <code>CSSStyleValue</code> type: <code>CSSTransformValue</code>, and so it's subsequent values have their own type too. This is really nice because so far in javaScript, when we've wanted to modify one transform value, we've had to save and recreate a whole string if there have been multiple transform values affecting an element.</p>
+
+	<p>Take this CSS for example:</p>
+
+	<pre><code class="language-css">svg {
+  transform: rotate(25deg) scale(1.2);
+}</code></pre>
+
+	<p>If we want to change the rotate value we have to remember the scale value, so if we reset the transform it stays scaled at 1.2, otherwise we loose it:</p>
+
+	<pre><code class="language-js">const rotate = 30;
+svgEl.style.transform = `rotate(${rotate}deg) scale(1.2)`;</code></pre>
+
+	<p>This can get a little frustrating, especially if we have quite a few transform values and are only changing one.</p>
+
+	<p>It would be much better if each part could be built individually and automatically, as well as the overall transform, and with types rather than a string.</p>
+
+	<p>Well, with Typed OM, you can!</p>
+
+	<h3><code>CSSTransformValue</code></h3>
+
+	<p>This creates a new transform value, which takes an array of the transform value types. Let's see what our above example would look like:</p>
+
+	<pre><code class="language-js">const transform = new CSSTransformValue([
+  new CSSRotate(CSS.deg(30)),
+  new CSSScale(CSS.number(1.2))
+])</code></pre>
+
+	<p>Each different transform has it's own type, which takes relevant <code>CSSNumericValue</code>s. Let's go through them.</p>
+
+	<h3><code>CSSRotate</code></h3>
+
+	<pre><code class="language-js">const rotate = new CSSRotate(CSS.deg(50));
+/* Returns: CSSRotate
+	angle: CSSUnitValue
+		unit: "deg"
+		value: 50
+	is2D: true */</code></pre>
+
+	<h3><code>CSSScale</code></h3>
+
+	<p>Scale can take two or three values. Two means it is scaled on a 2D plane, three in three dimensions.</p>
+
+	<pre><code class="language-js">const scale = new CSSScale(CSS.number(2), CSS.number(2));
+/* Returns: CSSScale
+	is2D: true
+	x: CSSUnitValue {value: 2, unit: "number"}
+	y: CSSUnitValue {value: 2, unit: "number"}
+	z: CSSUnitValue {value: 1, unit: "number"} */</code></pre>
+
+	<h3><code>CSSSkew</code></h3>
+
+	<p>There are 3 types of skew, as they all skew differently: <code>CSSSkew</code>, <code>CSSSkewX</code> and <code>CSSSkewY</code>.</p>
+
+	<pre><code class="language-js">const skew = new CSSSkew(CSS.deg(10), CSS.deg(20));
+/* Returns: CSSSKew
+	is2D: true
+	ax: CSSUnitValue {value: 10, unit: "deg"}
+	ay: CSSUnitValue {value: 20, unit: "deg"} */
+
+	const skewX = new CSSSkewX(CSS.grad(200));
+/* Returns: CSSSKewX
+	is2D: true
+	ax: CSSUnitValue {value: 200, unit: "grad"} */
+
+	const skewY = new CSSSkewY(CSS.rad(1.3));
+/* Returns: CSSSKewY
+	is2D: true
+	ax: CSSUnitValue {value: 1.3, unit: "rad"} */</code></pre>
+
+	<h3><code>CSSPerspective</code></h3>
+
+	<pre><code class="language-js">const perspective = new CSSPerspective(CSS.px(50));
+/* Returns: CSSPerspective
+	is2D: false
+	length: CSSUnitValue {value: 50, unit: "px"} */</code></pre>
+
+	<h3><code>CSSTranslate</code></h3>
+
+	<p>The translate value can take two or three values. Two means it's a 2D transform, three means it is 3D.</p>
+
+	<pre><code class="language-js">const translate = new CSSTranslate(CSS.px(20), CSS.px(50));
+/* Returns: CSSTranslate
+	is2D: true
+	x: CSSUnitValue {value: 20, unit: "px"}
+	y: CSSUnitValue {value: 50, unit: "px"}
+	z: CSSUnitValue {value: 0, unit: "px"} */</code></pre>
+
+	<p>Notice how all the types require compatible <code>CSSNumericValue</code>s. If you need a refresher on the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/transform">transform property the documentation is here</a>.</p>
+
+	<h3><code>is2D</code></h3>
+
+	<p>Note also the values that can transform in three dimensions. There's a boolean property on <code>CSSTransformValue</code> and all the values we've seen above,  to test if they return 2D or 3D.</p>
+
+	<pre><code class="language-js">const translate2d = new CSSTranslate(CSS.px(20), CSS.px(50));
+	let twodee = translate2d.is2D; // true
+
+	const translate3d = new CSSTranslate(CSS.px(20), CSS.px(50), CSS.px(-5));
+	twodee = translate3d.is2D; // false</code></pre>
+
+	<h3 id="tomatrix"><code>toMatrix()</code></h3>
+
+	<p>As well as the <code>is2D</code> property there is a <code>toMatrix()</code> method which returns the <code>matrix</code> value of the given <code>transform</code> value.</p>
+
+	<pre><code class="language-js">const transform = new CSSTransformValue([
+  new CSSRotate(CSS.deg(30)),
+  new CSSScale(CSS.number(1.2))
+]);
+
+const matrix = transform.toMatrix();
+/* Returns: DOMMatrix
+a: 1.0392304845413265
+b: 0.5999999999999999
+c: -0.5999999999999999
+d: 1.0392304845413265
+e: 0
+f: 0
+is2D: true
+isIdentity: false
+m11: 1.0392304845413265
+m12: 0.5999999999999999
+m13: 0
+m14: 0
+m21: -0.5999999999999999
+m22: 1.0392304845413265
+m23: 0
+m24: 0
+m31: 0
+m32: 0
+m33: 1
+m34: 0
+m41: 0
+m42: 0
+m43: 0
+m44: 1 */</code></pre>
+
+	<p>This can appear a little overwhelming as it's returning both the 2D matrix (a-f) and the 3D matrix (m11 - m44).</p>
+
+	<p>Now we've seen all the types, let's put them into practise with an <a href="../02example/">example in the next section</a></p>
+
+</article>
+
+<footer>
+	<p>Example created for MDN Docs: <a href="https://developer.mozilla.org/en-US/">See full documentation here</a> </p>
+</footer>
+
+<script src="../../../sharedAssets/prism.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
