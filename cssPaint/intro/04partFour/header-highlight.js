@@ -22,9 +22,8 @@ registerPaint('headerHighlight', class {
 		// use our custom arguments
 		ctx.fillStyle = colour;
 		ctx.strokeStyle = 'transparent';
+
 		const strokeWidth = args[1];
-		// console.log(strokeWidth.type, strokeWidth.value);
-		console.log(strokeWidth);
 		if (strokeWidth.unit === 'px') {
 			ctx.lineWidth = strokeWidth.value;
 		} else {
