@@ -1,5 +1,6 @@
 @import '/sharedAssets/shared-styles.css';
 
+
 .example {
 	--unit: 1.2rem;
 	--mainColour: hsl(198, 100%, 66%);
@@ -15,7 +16,7 @@
 	font-family: "zillaslab", serif;
 
 	cursor: pointer;
-	transform: scale(0.95) rotate(0deg);
+	transform: scale(0.95);
 }
 
 .example:hover {

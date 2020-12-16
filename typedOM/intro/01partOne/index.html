@@ -41,12 +41,12 @@ const allComputedStyles = buttonEl.computedStyleMap();
 for (const [prop, val] of allComputedStyles) {
 	// properties
 	const term = document.createElement('dt');
-	term.appendChild(document.createTextNode(prop));
+	term.innerText = prop;
 	stylesList.appendChild(term);
 
 	// values
 	const valDef = document.createElement('dd');
-	valDef.appendChild(document.createTextNode(val));
+	valDef.innerText = val;
 	stylesList.appendChild(valDef);
 }</code></pre>
 
@@ -56,12 +56,12 @@ for (const [prop, val] of allComputedStyles) {
 		<dl id="all-styles"></dl>
 	</details>
 
-	<p>Let's take a <a href="../02partTwo/">look at different value types in part two.</a></p>
+	<p>Let's take a <a href="../02partTwo/">look at the different methods we have available to us with the style map in part two.</a></p>
 
 </article>
 
 <footer>
-	<p>Example created for MDN Docs: <a href="https://developer.mozilla.org/en-US/">See fill documentation here</a> </p>
+	<p>Examples created by <a href="https://developer.mozilla.org/en-US/profiles/Rumyra">Rumyra</a> for MDN Docs: <a href="https://wiki.developer.mozilla.org/en-US/docs/Web/API/CSS_Typed_OM_API">See full documentation here</a> </p>
 </footer>
 
 <script src="../../../sharedAssets/prism.js"></script>

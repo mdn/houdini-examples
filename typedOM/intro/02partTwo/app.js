@@ -1,98 +1,69 @@
 console.clear();
 
 // get the button element
-const buttonEl = document.querySelector('button');
-// get our element to append info to
-const stylesList = document.querySelector('#all-styles');
+const buttonEl = document.querySelector('.example');
 
-// Part 1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // let's get some styles -> we can retrieve all computed styles with `computedStyleMap`
 const allComputedStyles = buttonEl.computedStyleMap();
 
-// for every sub class,
-// get a relevant computed style and return it's type
-// essentially a basic code test
-function logType(section, property) {
-	const commentEl = section.querySelector('.get-type .comment');
-	const subclass = allComputedStyles.get(property);
-	commentEl.appendChild(
-		document.createTextNode(subclass.constructor.name)
-	);
-	return subclass;
-}
-// CSSKeywordValue
-const keywordSection = document.querySelector('.keyword-val');
-const cssKeywordValue = logType(keywordSection, 'display');
+// StylePropertyMapReadOnly
+// iterable methods ==================
+// keys returns an iterable list of properties
+const props = allComputedStyles.keys();
+console.log(props.next().value); // returns align-content
 
-const keywordPropsEl = keywordSection.querySelector('.props .comment');
-keywordPropsEl.appendChild(
-	document.createTextNode(cssKeywordValue.value)
-);
+// values returns an iterable list of the css values
+const vals = allComputedStyles.values();
+console.log(vals.next().value); // returns a CSSStyleValue
 
-// CSSImageValue
-const imageSection = document.querySelector('.image-val');
-const cssImageVal = logType(imageSection, 'background-image');
+// entries returns an iterable of the items
+const iterableStyles = allComputedStyles.entries();
+console.log(iterableStyles.next().value); // returns a two item array with align-content as the first item and CSSStyleValue as the second
 
-const imagePropsEl = imageSection.querySelector('.props .comment');
-imagePropsEl.appendChild(
-	document.createTextNode(cssImageVal.value)
-);
+// forEach will allow us to run code over each prop/val pair
+allComputedStyles.forEach((elem, index, arr) => {
+	// oode to run for each pair
+})
 
-// CSSUnitValue
-const unitSection = document.querySelector('.unit-val');
-const cssUnitVal = logType(unitSection, 'border-top-width');
+// interface methods ========================
+// let's get the value for padding-top
+const padTop = allComputedStyles.get('padding-top');
+console.log(padTop); // logs a CSSUnitValue
 
-const unitPropsEl = unitSection.querySelector('.props .comment');
-unitPropsEl.appendChild(
-	document.createTextNode(`Value: ${cssUnitVal.value}, Unit: ${cssUnitVal.unit}`)
-);
+const allPadTop = allComputedStyles.getAll('padding-top');
+console.log(allPadTop); // logs an array with one item: A CSSUnitValue
 
-// CSSMathValue
-const mathSection = document.querySelector('.math-val');
-const cssMathVal = logType(mathSection, 'width');
+const hasPadTop = allComputedStyles.has('padding-top');
+console.log(hasPadTop); // logs true
 
-let units = ''
-for (const unit of cssMathVal.values) {
-	units += ` value: ${unit.value}, unit: ${unit.unit}`;
-}
+const amountStyles = allComputedStyles.size;
+console.log(amountStyles); // logs 338
 
-const mathPropsEl = mathSection.querySelector('.props .comment');
-mathPropsEl.appendChild(
-	document.createTextNode(`Operator: ${cssMathVal.operator}, | Values: ${units}`)
-);
 
-// CSSTransformValue
-const transformSection = document.querySelector('.transform-val');
-const cssTransformVal = logType(transformSection, 'transform');
+// StylePropertyMap
+// set padding-top on button style attribute
+buttonEl.attributeStyleMap.set('padding-top', CSS.px(10));
 
-// TODO make object to write out later
-// TODO change above code
-let scale = {}
-for (const transform of cssTransformVal) {
-	scale.is2d = transform.is2D;
-	scale.vec = ` x: ${transform.x}, y: ${transform.y}, z: ${transform.z}`;
-}
+// set background-image on button style attribute
+buttonEl.attributeStyleMap.set('background-image', 'linear-gradient(90deg, white, black');
 
-const transformPropsEl = transformSection.querySelector('.props .comment');
-transformPropsEl.appendChild(
-	document.createTextNode(`is2D: ${scale.is2d} | Coords: ${scale.vec}`)
-);
+// append another value to the background-image property set on the attribute
+buttonEl.attributeStyleMap.append('background-image', 'linear-gradient(180deg, blue, black');
 
-// CSSUnparsedValue
-const parseSection = document.querySelector('.unparse-val');
-const cssUnparseVal = logType(parseSection, '--unit');
+// remove background-image from style attribute
+buttonEl.attributeStyleMap.delete('background-image');
 
-const parsePropsEl = parseSection.querySelector('.props .comment');
-parsePropsEl.appendChild(
-	document.createTextNode(cssUnparseVal[0])
-);
+// clear all properties from the style attribute
+buttonEl.attributeStyleMap.clear();
 
-// parsing
-const parsed = CSSNumericValue.parse(cssUnparseVal);
+// access stylesheet rules
+const stylesheet = document.styleSheets[1];
 
-const anotherParsed = CSSStyleValue.parse('background', 'red');
+let buttonCSS = '';
+Object.values(stylesheet.cssRules).forEach(block => {
 
-// create a custom prop
-const customProp = new CSSVariableReferenceValue('--secondColour', new CSSUnparsedValue(['black']));
+	if (block.selectorText === '.example') {
+		block.styleMap.set('--mainColour', 'black');
+	}
+})
 
-console.log(customProp);

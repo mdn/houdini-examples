@@ -12,12 +12,12 @@ const allComputedStyles = buttonEl.computedStyleMap();
 for (const [prop, val] of allComputedStyles) {
 	// properties
 	const term = document.createElement('dt');
-	term.appendChild(document.createTextNode(prop));
+	term.innerText = prop;
 	stylesList.appendChild(term);
 
 	// values
 	const valDef = document.createElement('dd');
-	valDef.appendChild(document.createTextNode(val));
+	valDef.innerText = val;
 	stylesList.appendChild(valDef);
 }
 

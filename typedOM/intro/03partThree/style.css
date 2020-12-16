@@ -15,7 +15,7 @@
 	font-family: "zillaslab", serif;
 
 	cursor: pointer;
-	transform: scale(0.95);
+	transform: scale(0.95) rotate(0deg);
 }
 
 .example:hover {

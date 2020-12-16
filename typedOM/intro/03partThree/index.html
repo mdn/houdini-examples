@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-  <title>Part 3 Methods | Typed OM</title>
+  <title>Part 3 Style Value Types | Typed OM</title>
   <meta name="description" content="Demonstration for Mozilla Developer Network using Typed OM.">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -18,72 +18,162 @@
 
 <header>
 	<h2>CSS Houdini Collection</h2>
-	<h1>Typed OM: Part 3 Style Maps & Methods</h1>
+	<h1>Typed OM: Part 3 Style Value Types & Parsing</h1>
 </header>
 
 <article class="houdini-demo typed-om">
 
 	<button class="example">Click Me</button>
 
-	<p>Now that we know all about the <code>CSSStyleValue</code> types, let's take a look at creating them and setting them on an element.</p>
+	<p>A huge array of properties and values is returned. Let's take a closer look at those values. They are all of type <code>CSSStyleValue</code> — let's retrieve some values using the <code>get()</code> method, which comes with <code>computedStyleMap()</code>.</p>
 
-	<p>So far we've been working with <code>computedStyleMap</code>, which returns all the properties and values affecting an element, but there is also the <code>attributeStyleMap</code> for getting and setting inline styles. This is much like our already commonly used <code>style()</code> method, and you might wonder why we need to change something that works. With this new Typed OM method we also work with all the <code>CSSStyleValue</code> types, rather than just strings. This makes our code far more robust and flexible.</p>
+	<p><code>CSSStyleValue</code> has sub classes, depending on the type of value you use for the defined property. Let's take a look at them.</p>
 
-	<p>Note: Both the computed and attribute style maps are of type <code>StylePropertyMap</code>, which is a map-like object, and so supports all the common methods like <code>get()</code>, <code>set()</code>, <code>keys()</code>, <code>values()</code>, and <code>entries()</code> — making them intuitive to work with<sup>1</sup>. There is also <code>styleMap</code>,	which is described further down.</p>
+	<section class="type style-val">
+		<h3><code>CSSStyleValue</code></h3>
+		<p>Parent class for all values set on an element.</p>
+		<p>This class holds the <code>parse</code> and <code>parseAll</code> methods, which we will look at a bit later. Before we do that, let's take a look at all the sub classes.</p>
+	</section>
 
-	<p>Let's take a look at the methods available to us when using the <code>attributeStyleMap</code>. To simply add a style and then retrieve it, we can use the <code>set()</code> and <code>get()</code> methods.</p>
+	<section class="type keyword-val">
+		<h3><code>CSSKeywordValue</code></h3>
+		<p>Class that defines things like keywords (<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Value_definition_syntax#Keywords">see the list here</a>) — e.g. <code>inherit</code>, <code>initial</code>, <code>unset</code>, and anything you don't quote such as <code>auto</code>, <code>grid</code> etc...</p>
 
-	<pre class="language-js"><code>buttonEl.attributeStyleMap.set('padding-top', CSS.px(10));
+		<pre class="get-type language-js"><code>const cssKeywordValue = allComputedStyles.get('display');
+<span class="comment">// Returns: </span></code></pre>
 
-const padTop = buttonEl.attributeStyleMap.get('padding-top');
+		<p>This subclass gives you a <code>value</code> property which returns the display type set: <code>cssKeywordValue.value</code></p>
 
-console.log(padTop);
-// logs: CSSUnitValue {value: 10, unit: 'px'}</code></pre>
+		<pre class="props language-js"><code>console.log(cssKeywordValue.value);
+<span class="comment">// Logs: </span></code></pre>
 
-	<p>A couple of things to note here: When we are setting the pixel value we are creating a <code>CSSUnitValue</code> using the <code>CSS.px()</code> factory method. We could have set it thus:</p>
+	</section>
 
-	<pre class="language-js"><code>new CSSUnitValue(10, px);</code></pre>
+	<section class="type image-val">
+		<h3><code>CSSImageValue</code></h3>
+		<p>Returned when the value of a CSS property is an image.</p>
 
-	<p>We can use this to create any <code>CSSStyleValue</code> we've already seen</p>
+		<pre class="get-type language-js"><code>const cssImageValue = allComputedStyles.get('background-image');
+<span class="comment">// Returns: </span></code></pre>
 
-	<p>Also, when we get the property a <code>CSSUnitValue</code> returned. That's handy because we don't have to do any parsing to retrieve the number <em>or</em> the unit, they are just available to us.</p>
+		<p>At the time of writing this is yet to be implemented - the spec only holds the <code>CSSImageValue</code> type as it's needed for the CSS Paint API. This will be expanded on in future versions: <code>cssImageValue.value</code></p>
 
-	<p>And there's more, as well as the <code>set()</code> and <code>get()</code> methods, there are <code>has()</code>, <code>delete()</code>, and <code>clear()</code>.</p>
+		<pre class="props language-js"><code>console.log(cssImageValue.value);
+<span class="comment">// Logs: </span></code></pre>
+	</section>
 
-	<pre class="language-js"><code>buttonEl.attributeStyleMap.has('padding-top') // returns true
+	<section class="type numeric-val">
+		<h3><code>CSSNumericValue</code></h3>
+		<p>Returned when the value is numeric. This is a superclass from which <code>CSSUnitValue</code> and <code>CSSMathSum</code> are derived, so one of these will be returned instead, depending on whether the value is determined via the <code>calc(), min(), max()</code> function or not.</p>
+	</section>
 
-buttonEl.attributeStyleMap.delete('padding-top') // removes padding-top from attribute styles
+	<section class="type unit-val">
+		<h3><code>CSSUnitValue</code></h3>
+		<p>Returned if a value is of unit type.</p>
 
-buttonEl.attributeStyleMap.clear() // removes all attribute styles
-	</code></pre>
+		<pre class="get-type language-js"><code>const cssUnitValue = allComputedStyles.get('border-top-width');
+<span class="comment">// Returns: </span></code></pre>
 
-	<p>As well as attribute styles we can also access stylesheet rules:</p>
+		<p>With this type we can access the numeric value: <code>cssUnitVal.value</code> <em>and</em> its unit: <code>cssUnitVal.unit</code></p>
 
-	<pre class="language-js"><code>const stylesheet = document.styleSheets[0];
+		<pre class="props language-js"><code>console.log(`Value: ${cssUnitVal.value}, Unit: ${cssUnitVal.unit}`);
+<span class="comment">// Logs: </span></code></pre>
+	</section>
 
-Object.values(stylesheet.cssRules).forEach(block => {
+	<section class="type math-val">
+		<h3><code>CSSMathSum</code></h3>
+		<p>Returned if the CSS value is determined via the <code>calc(), min(), max()</code> functions, and the units specified are of different unit types.</p>
 
-	if (block.selectorText === 'button') {
-		console.log(block.cssText);
-	}
-})
-// Logs css block: button { --unit: 1.2rem; --mainColour: hsl(198, 100%, 66%); display: inline-block; padding: var(--unit) calc(var(--unit)*2); ...}
-</code></pre>
+		<pre class="get-type language-js"><code>const cssMathSum = allComputedStyles.get('width');
+<span class="comment">// Returns: </span></code></pre>
 
-	<p>The methods already discussed are available to us and we can modify or update any of these properties like so:</p>
+		<p>With this type we can access the calculation that has occurred, as well as units involved in that calculation. These are returned as an array of <code>CSSUnitValues</code></p>
+		<pre class="props language-js"><code>let units = ''
 
-<pre class="language-js"><code>if (block.selectorText === '.example') {
-	block.styleMap.set('--mainColour', 'black');
+for (const unit of cssMathSum.values) {
+	units += ` value: ${unit.value}, unit: ${unit.unit}`;
 }
-</code></pre>
 
-	<p>Might be worth noting this should be used with caution, as it's a pretty powerful way to update your styles.</p>
+console.log(`Operator: ${cssMathSum.operator}, | Values: ${units}`)
+<span class="comment">// Logs: </span></code></pre>
+	</section>
 
-	<p>Well done! You've covered all the basics of using Typed OM. There's quite a bit there and with all the values quite a bit still to think about (all the math sums for instance) There's <a href="../../reference/">a reference with resources here</a> and loads more information in the MDN docs.</p>
+	<section class="type transform-val">
+		<h3><code>CSSTransformValue</code></h3>
+		<p>If a transform value is used, this type is returned.</p>
 
-	<p>There's <a href="">more examples here</a> of using Typed OM in practice.</p>
+		<pre class="get-type language-js"><code>const cssTransformValue = allComputedStyles.get('transform');
+<span class="comment">// Returns: </span></code></pre>
 
-	<p><sup>1</sup>https://developers.google.com/web/updates/2018/03/cssom</p>
+		<p>Returns a list of all the different transforms applied to the element and their different values. The transform determines what is returned. In our example here we just have a scale applied.</p>
+
+		<pre class="props language-js"><code>let scale = {}
+for (const transform of cssTransformVal) {
+	scale.is2d = transform.is2D;
+	scale.vec = ` x: ${transform.x}, y: ${transform.y}, z: ${transform.z}`;
+}
+
+console.log(`is2D: ${scale.is2d}, | Coords: ${scale.vec}`);
+<span class="comment">// Logs: </span></code></pre>
+	</section>
+
+	<section class="type unparse-val">
+		<h3><code>CSSUnparsedValue</code></h3>
+		<p>Represents custom properties</p>
+
+		<pre class="get-type language-js"><code>const cssUnparsedValue = allComputedStyles.get('--unit');
+<span class="comment">// Returns: </span></code></pre>
+
+		<p>This returns any values of a custom property that could be set or affect said element. Here we're specifying which property we want.</p>
+
+		<pre class="props language-js"><code>console.log(cssUnparseValue[0]);
+<span class="comment">// Logs: </span></code></pre>
+	</section>
+
+	<section class="type variable">
+		<h3><code>CSSVariableReferenceValue</code></h3>
+
+		<p>If we want to <em>create</em> a custom property, rather than just retrieve its value, we would use the <code>CSSVariableReferenceValue</code> type. This is not returned, as you can use any value with a custom property when setting it, however it can be defined when created. The value we enter here needs to be of type <code>CSSUnparsedValue</code>.</p>
+
+		<pre class="language-js"><code>const customProp = new CSSVariableReferenceValue('--secondColour', new CSSUnparsedValue(['black']));
+
+console.log(customProp);
+// Logs: CSSVariableReferenceValue {variable: "--secondColour", fallback: CSSUnparsedValue}</code></pre>
+
+
+		<p>There's more about creating properties and values using these types in the next section.</p>
+	</section>
+
+	<section class="type parsing">
+		<h3>Parsing Properties & Values</h3>
+
+		<p>We can parse <code>CSSUnparsedValue</code> object instances with a couple of methods we get with the <code>CSSStyleValue</code> type: <code>parse()</code> and <code>parseAll()</code>. As it's a numeric value we'll use the <code>CSSNumericValue.parse()</code> method on the value. Let's take a look:</p>
+
+		<pre class="language-js"><code>const parsed = CSSNumericValue.parse(cssUnparseVal);
+console.log(parsed);
+// Logs: CSSUnitValue {value: 1.2, unit: "rem"}</code></pre>
+
+		<p>We can do this with any property and value if we use the <code>parse()</code> method on the <code>CSSStyleVal</code> super class:</p>
+
+		<pre class="language-js"><code>const anotherParsed = CSSStyleValue.parse('background', 'red');
+console.log(anotherParsed);
+// Logs: CSSStyleValue</code></pre>
+
+		<p>This can be handy for a number of reasons. These new types are nice to work with in JavaScipt, plus we get out of the box error handling:<sup>1</sup></p>
+
+		<pre class="language-js"><code>try {
+  const css = CSSStyleValue.parse('transform', 'translate4d(bogus value)');
+  // use css
+} catch (err) {
+  console.err(err);
+}</code></pre>
+
+	</section>
+
+	<p>These are all of the types we will get to work with, and there are more to come as well. Not only do we have better access to CSS value information, we also have better ways of setting and retrieving styles on an element. Let's <a href="../03partThree/">take a look in part three.</a></p>
+
+<p><sup>1</sup> <a href="https://developers.google.com/web/updates/2018/03/cssom">https://developers.google.com/web/updates/2018/03/cssom</a></p>
+
 </article>
 
 <footer>
