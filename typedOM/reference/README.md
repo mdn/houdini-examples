@@ -47,7 +47,7 @@ Super class
 
 #### CSSImageValue
 
-At the time of writing return CSSStyleValue
+At the time of writing returns CSSStyleValue
 
 #### CSSNumericValue
 
@@ -133,6 +133,7 @@ The spec is being worked on, holes are being plugged and new features in discuss
 
 ## Resources
 
+- [The Typed Object Model](https://css-tricks.com/the-typed-object-model/)
 - [Working with the new CSS Typed Object Model](https://developers.google.com/web/updates/2018/03/cssom)
 - [An overview of Typed OM](https://houdini.glitch.me/typed-om)
 - [Current Draft Specification](https://drafts.css-houdini.org/css-typed-om-1/)

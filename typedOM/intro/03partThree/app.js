@@ -5,21 +5,23 @@ const buttonEl = document.querySelector('button');
 // get our element to append info to
 const stylesList = document.querySelector('#all-styles');
 
-// Part 1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // let's get some styles -> we can retrieve all computed styles with `computedStyleMap`
 const allComputedStyles = buttonEl.computedStyleMap();
 
-// for every sub class,
-// get a relevant computed style and return it's type
-// essentially a basic code test
+
+/**
+ * @description adds to the 'Returns:' part of the comment for each code block on the page, with the relevant value type. Also logs the result to the console.
+ */
 function logType(section, property) {
 	const commentEl = section.querySelector('.get-type .comment');
 	const subclass = allComputedStyles.get(property);
 	commentEl.appendChild(
 		document.createTextNode(subclass.constructor.name)
 	);
+	console.log(property, subclass);
 	return subclass;
 }
+
 // CSSKeywordValue
 const keywordSection = document.querySelector('.keyword-val');
 const cssKeywordValue = logType(keywordSection, 'display');

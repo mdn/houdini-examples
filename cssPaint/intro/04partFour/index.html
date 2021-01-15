@@ -6,15 +6,16 @@
   <meta name="description" content="Demonstration for Mozilla Developer Network using CSS Paint API.">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" href="../../../sharedAssets/shared-styles.css">
+  <link rel="stylesheet" href="../../../assets/minimalist.css">
+  <link rel="stylesheet" href="../../../assets/shared-styles.css">
   <link rel="stylesheet" href="style.css">
 
 </head>
 <body>
 
 	<header>
-		<h2>CSS Houdini Collection</h2>
-		<h1>CSS Paint API: Part 4 Custom Arguments</h1>
+		<h2>CSS Houdini Collection: CSS Paint API</h2>
+		<h1>Part 4: Custom Arguments</h1>
 	</header>
 
 <article class="houdini-demo paint-api">
@@ -23,7 +24,7 @@
 
 	<p>We add these extra arguments when we call the function in the CSS. Let's say we want to sometimes stroke our background instead of fill it, let's pass in an extra argument for this occasion.</p>
 
-	<pre class="language-css"><code>h1 {
+<pre class="language-css"><code>h1 {
 	background-image: paint(headerHighlight, stroke);
 }
 </code></pre>
@@ -88,11 +89,10 @@
 </article>
 
 <footer>
-	<p>Example created for MDN Docs: <a href="https://developer.mozilla.org/en-US/">See fill documentation here</a> </p>
+	<p>Example created for MDN Docs: <a href="https://developer.mozilla.org/en-US/">See full documentation here</a> </p>
 </footer>
 
-<script src="../../../sharedAssets/prism.js"></script>
-<script src="/sharedAssets/prism.js"></script>
+<script src="../../../assets/prism.js"></script>
 <script>
   CSS.paintWorklet.addModule('header-highlight.js');
 </script>

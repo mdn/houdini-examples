@@ -6,8 +6,9 @@
   <meta name="description" content="Demonstration for Mozilla Developer Network using Typed OM.">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" href="../../../sharedAssets/shared-styles.css">
-  <link rel="stylesheet" href="style.css">
+  <!-- <link rel="stylesheet" href="../../../sharedAssets/shared-styles.css"> -->
+  <link rel="stylesheet" href="../../../sharedAssets/minimalist.css">
+  <!-- <link rel="stylesheet" href="style.css"> -->
 
   <style type="text/css">
 
@@ -25,14 +26,16 @@
 
 	<button class="example">Click Me</button>
 
-	<p>A huge array of properties and values is returned. Let's take a closer look at those values. They are all of type <code>CSSStyleValue</code> — let's retrieve some values using the <code>get()</code> method, which comes with <code>computedStyleMap()</code>.</p>
+	<p>When using the previously introduced style maps, each value is returned as a <code>CSSStyleValue</code>. This is the parent class for a whole load of different sub classes, categorizing all the different values you can use in CSS.</p>
 
-	<p><code>CSSStyleValue</code> has sub classes, depending on the type of value you use for the defined property. Let's take a look at them.</p>
+	<p>Let's retrieve some values using the <code>get()</code> method, which comes with <code>computedStyleMap()</code>, and take a look at all these different style value types.</p>
+
+	<p>You can see all the javascript used on this page within the <a href="app.js">app.js</a> file. You can inspect this page with your browsers devtools to see the console logs detailed below.</p>
 
 	<section class="type style-val">
 		<h3><code>CSSStyleValue</code></h3>
-		<p>Parent class for all values set on an element.</p>
-		<p>This class holds the <code>parse</code> and <code>parseAll</code> methods, which we will look at a bit later. Before we do that, let's take a look at all the sub classes.</p>
+		<p>Parent class for all values set on an element. It's doubtful you will work with this interface directly but as a part of the child interfaces below.</p>
+		<p>This class holds the static <code>parse</code> and <code>parseAll</code> methods, which we will look at a bit later. Before we do that, let's take a look at all the sub classes.</p>
 	</section>
 
 	<section class="type keyword-val">
@@ -56,7 +59,7 @@
 		<pre class="get-type language-js"><code>const cssImageValue = allComputedStyles.get('background-image');
 <span class="comment">// Returns: </span></code></pre>
 
-		<p>At the time of writing this is yet to be implemented - the spec only holds the <code>CSSImageValue</code> type as it's needed for the CSS Paint API. This will be expanded on in future versions: <code>cssImageValue.value</code></p>
+		<p>At the time of writing this is yet to be implemented (a <code>CSSStyleValue</code> is returned) - the spec only holds the <code>CSSImageValue</code> type as it's needed for the CSS Paint API. This will be expanded on in future versions: <code>CSSImageValue.value</code></p>
 
 		<pre class="props language-js"><code>console.log(cssImageValue.value);
 <span class="comment">// Logs: </span></code></pre>
@@ -65,6 +68,7 @@
 	<section class="type numeric-val">
 		<h3><code>CSSNumericValue</code></h3>
 		<p>Returned when the value is numeric. This is a superclass from which <code>CSSUnitValue</code> and <code>CSSMathSum</code> are derived, so one of these will be returned instead, depending on whether the value is determined via the <code>calc(), min(), max()</code> function or not.</p>
+		<p>The <code>CSSNumericValue</code> class comes with lots of methods, which we'll deep dive into in the <a href="../numericValue/03methods/">Numeric Value examples</a>.</p>
 	</section>
 
 	<section class="type unit-val">
@@ -144,6 +148,7 @@ console.log(customProp);
 		<p>There's more about creating properties and values using these types in the next section.</p>
 	</section>
 
+<!--STATIC-->
 	<section class="type parsing">
 		<h3>Parsing Properties & Values</h3>
 
