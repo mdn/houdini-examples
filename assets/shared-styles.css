@@ -72,7 +72,7 @@ code {
 	tab-size: 4; font-size: 86%;
 } */
 
-pre code {
+pre code, h3 code {
 	background: none;
 }
 
